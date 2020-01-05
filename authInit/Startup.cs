@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using authInit.Contexts;
 using authInit.Services;
@@ -32,7 +31,7 @@ namespace authInit
         {
             services.AddDbContext<UserContext>(options =>
             {
-                options.UseMySql(AppConfiguration.AuthDb.ConnectionString);
+                options.UseMySql(AppConfiguration.AuthDb.Connection.ConnectionString);
             });
 
             services.AddSingleton<IDatabaseUpdater, DatabaseUpdater>();
@@ -43,7 +42,7 @@ namespace authInit
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
-            UpdateDb(app).Wait();
+            logger.LogInformation($"Using DB Connection : server = {AppConfiguration.AuthDb.Connection.Server} / db = {AppConfiguration.AuthDb.Connection.Database} / user = {AppConfiguration.AuthDb.Connection.User}");
             
             if (env.IsDevelopment())
             {
@@ -57,6 +56,9 @@ namespace authInit
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            
+            UpdateDb(app).ContinueWith((Task old) => { Environment.Exit(1); });
+
         }
         
         async Task<Boolean> UpdateDb(IApplicationBuilder app)
@@ -66,7 +68,7 @@ namespace authInit
                 using var serviceScope = app.ApplicationServices.CreateScope();
                 var databaseUpdater = serviceScope.ServiceProvider.GetService<IDatabaseUpdater>();
 
-                databaseUpdater.UpdateDb();
+                await databaseUpdater.UpdateDb();
             }
             catch (Exception e)
             {
