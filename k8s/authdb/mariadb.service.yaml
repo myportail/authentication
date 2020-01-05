@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myportail-authdb
+spec:
+  selector:
+    matchLabels:
+      app: myportail
+  template:
+    metadata:
+      labels:
+        app: myportail
+        service: authdb
+        tags: mariadb
+    spec:
+      volumes:
+        - name: authdbstorage
+          persistentVolumeClaim:
+            claimName: authdbstorage-claim
+        - name: mysql-initdb
+          configMap:
+            name: mysql-initdb-config
+      containers:
+        - name: authdb
+          image: mariadb:latest
+          resources:
+            limits:
+              memory: "250M"
+              cpu: "0.5"
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: authdbstorage
+              mountPath: "/var/lib/mysql"
+            - name: mysql-initdb
+              mountPath: /docker-entrypoint-initdb.d
+          env:
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: authdbsecrets
+                  key: mysqlusername
+              # value: authService
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: authdbsecrets
+                  key: mysqlpassword
+              # value: igQFUwjZZyxgken7gcKg*gTu
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                  secretKeyRef:
+                    name: authdbsecrets
+                    key: mysqlrootpassword
+              # value: password123
+      initContainers:
+        - name: authdb-perm-fix
+          image: busybox
+          command: ["/bin/chmod","-R","777", "/data"]
+          volumeMounts:
+            - name: authdbstorage
+              mountPath: /data
