@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  auth-service:
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
+    image: auth-service
+    working_dir: /app
+    entrypoint: ["dotnet", "authService.dll"]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=DockerDev
+    networks:
+      - myportail_authService
+    ports:
+      - "8001:8001"
+    external_links:
+      - authdb
+networks:
+  myportail_authService:
+    external: true
