@@ -40,19 +40,16 @@ spec:
                 secretKeyRef:
                   name: authdbsecrets
                   key: mysqlusername
-              # value: authService
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: authdbsecrets
                   key: mysqlpassword
-              # value: igQFUwjZZyxgken7gcKg*gTu
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                   secretKeyRef:
                     name: authdbsecrets
                     key: mysqlrootpassword
-              # value: password123
       initContainers:
         - name: authdb-perm-fix
           image: busybox
