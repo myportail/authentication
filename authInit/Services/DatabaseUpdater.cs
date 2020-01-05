@@ -11,16 +11,16 @@ namespace authInit.Services
     public class DatabaseUpdater : IDatabaseUpdater
     {
         private ILogger Logger { get; }
-        private UserContext UserContext { get; }
+        private IServiceProvider ServiceProvider { get; }
         
         public DatabaseUpdater(
             ILogger<DatabaseUpdater> logger,
-            UserContext userContext)
+            IServiceProvider serviceProvider )
         {
             Logger = logger;
-            UserContext = userContext;
+            ServiceProvider = serviceProvider;
 
-            Logger.LogDebug("DatabaseUpdater creation");
+            Logger.LogInformation("DatabaseUpdater creation");
         }
 
         public async Task UpdateDb()
@@ -44,7 +44,9 @@ namespace authInit.Services
         {
             try
             {
-                await UserContext.Database.MigrateAsync();
+                using var scope = ServiceProvider.CreateScope();
+                var context = scope.ServiceProvider.GetService<UserContext>();
+                await context.Database.MigrateAsync();
             }
             catch (Exception e)
             {

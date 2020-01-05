@@ -35,7 +35,7 @@ namespace authInit
                 options.UseMySql(AppConfiguration.AuthDb.ConnectionString);
             });
 
-            services.AddScoped<IDatabaseUpdater, DatabaseUpdater>();
+            services.AddSingleton<IDatabaseUpdater, DatabaseUpdater>();
 
             services.AddControllers();
         }
@@ -58,23 +58,6 @@ namespace authInit
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
-
-        // async Task TryUpdateDb(IApplicationBuilder app)
-        // {
-        //     var updateSucceeded = false;
-        //     do
-        //     {
-        //         Console.WriteLine("Attemping to update database");
-        //         updateSucceeded = await UpdateDb(app);
-        //         if (!updateSucceeded)
-        //         {
-        //             Console.WriteLine("database update failed : waiting 30sec to retry");
-        //             await Task.Delay(30 * 1000);
-        //         }
-        //     } while (!updateSucceeded);
-        //     
-        //     Console.WriteLine("database update successful");
-        // }
         
         async Task<Boolean> UpdateDb(IApplicationBuilder app)
         {
@@ -84,9 +67,6 @@ namespace authInit
                 var databaseUpdater = serviceScope.ServiceProvider.GetService<IDatabaseUpdater>();
 
                 databaseUpdater.UpdateDb();
-                // var context = serviceScope.ServiceProvider.GetService<UserContext>();
-                //
-                // await context.Database.MigrateAsync();
             }
             catch (Exception e)
             {
