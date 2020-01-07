@@ -1,0 +1,20 @@
+
+apiVersion: batch/v1
+kind: job
+metadata:
+  name: myportail-auth
+spec:
+  selector:
+    matchLabels:
+      app: myportail
+  template:
+    metadata:
+      labels:
+        app: myportail
+        service: authenticationinit
+    spec:
+      containers:
+        - name: authenticationinit
+          image: myportail/authentication-init:latest
+          workingDir: /authInit
+          command: ["dotnet", "authInit.dll"]

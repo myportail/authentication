@@ -3,6 +3,7 @@ kind: Kustomization
 
 bases:
   - ../../../../../authdb
+  - ../../../../../authInit
 
 resources:
   - secrets.yaml
