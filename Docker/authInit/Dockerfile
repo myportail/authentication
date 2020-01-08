@@ -1,6 +1,7 @@
-FROM microsoft/dotnet:3.1-sdk as build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 as build
 WORKDIR /src
-COPY ./ ./authInit
+COPY ./authInit ./authInit
+COPY ./authlib ./authlib
 WORKDIR /src/authInit
 RUN dotnet restore -nowarn:msb3202,nu1503
 RUN dotnet build -c Debug -o /app
@@ -8,6 +9,6 @@ RUN dotnet build -c Debug -o /app
 FROM build AS publish
 RUN dotnet publish -c Release -o /app
 
-FROM microsoft/dotnet:3.1-runtime as final
+FROM mcr.microsoft.com/dotnet/core/runtime:3.1 as final
 COPY --from=publish /app /authInit
 
