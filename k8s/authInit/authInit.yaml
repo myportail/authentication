@@ -1,12 +1,9 @@
 
 apiVersion: batch/v1
-kind: job
+kind: Job
 metadata:
-  name: myportail-auth
+  name: myportail-authinit
 spec:
-  selector:
-    matchLabels:
-      app: myportail
   template:
     metadata:
       labels:
@@ -18,3 +15,4 @@ spec:
           image: myportail/authentication-init:latest
           workingDir: /authInit
           command: ["dotnet", "authInit.dll"]
+      restartPolicy: Never

@@ -50,6 +50,7 @@ spec:
                   secretKeyRef:
                     name: authdbsecrets
                     key: mysqlrootpassword
+      restartPolicy: Always
       initContainers:
         - name: authdb-perm-fix
           image: busybox
