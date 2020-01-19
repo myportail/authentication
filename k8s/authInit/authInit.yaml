@@ -15,15 +15,15 @@ spec:
           image: myportail/authentication-init:latest
           workingDir: /authInit
           command: ["dotnet", "authInit.dll"]
-        env:
-          - name: "App:authdb:connection:user"
-            valueFrom:
-              secretKeyRef:
-                name: authdbsecrets
-                key: mysqlusername
-          - name: "App:authdb:connection:password"
-            valueFrom:
-              secretKeyRef:
-                name: authdbsecrets
-                key: mysqlpassword
+          env:
+            - name: App__authdb__connection__user
+              valueFrom:
+                secretKeyRef:
+                  name: authdbsecrets
+                  key: mysqlusername
+            - name: App__authdb__connection__password
+              valueFrom:
+                secretKeyRef:
+                  name: authdbsecrets
+                  key: mysqlpassword
       restartPolicy: Never
