@@ -18,6 +18,7 @@ namespace authInit
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingContext, config) => { config.AddEnvironmentVariables().Build(); })
                 .ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();
