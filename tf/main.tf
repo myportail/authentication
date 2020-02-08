@@ -24,35 +24,35 @@ provider "digitalocean" {
 #   region = "tor1"
 # }
 
-resource "digitalocean_kubernetes_cluster" "kubtest" {
-  name    = "kubtest"
+resource "digitalocean_kubernetes_cluster" "myportail" {
+  name    = "myportail"
   region  = "tor1"
   # Grab the latest version slug from `doctl kubernetes options versions`
   version = "1.16.6-do.0"
 
   node_pool {
-    name       = "worker-pool"
+    name       = "myportail-pool"
     size       = "s-1vcpu-2gb"
     node_count = 2
   }
 }
 
-data "digitalocean_droplet" "kubtest" {
-  name = digitalocean_kubernetes_cluster.kubtest.node_pool[0].nodes[0].name
+data "digitalocean_droplet" "myportail" {
+  name = digitalocean_kubernetes_cluster.myportail.node_pool[0].nodes[0].name
 }
 
 output "kub_server_name" {
-   value = digitalocean_kubernetes_cluster.kubtest.name
+   value = digitalocean_kubernetes_cluster.myportail.name
 }
 
 output "kub_droplet_ip" {
-  value = data.digitalocean_droplet.kubtest.ipv4_address
+  value = data.digitalocean_droplet.myportail.ipv4_address
 }
 
 resource "digitalocean_record" "www" {
   domain = "danny-thibaudeau.ca"
   type = "A"
   name = "dev.authdb"
-  value = data.digitalocean_droplet.kubtest.ipv4_address
+  value = data.digitalocean_droplet.myportail.ipv4_address
   ttl = "60"
 }
