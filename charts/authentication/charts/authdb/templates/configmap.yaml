@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-initdb-config
+  namespace: {{ .Values.namespace }}
+data:
+  initdb.sql: |
+    CREATE DATABASE Auth;
+    USE Auth;
+    GRANT ALL PRIVILEGES ON Auth.* TO 'authservice'@'%';
+    CREATE TABLE test (id INT, name VARCHAR(256), age INT, gender VARCHAR(3));
