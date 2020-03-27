@@ -31,11 +31,11 @@ namespace authService.Services
             MongoDbService = mongoDbService;
         }
 
-        public async Task<Model.Db.User> AddUser(Model.Api.User user)
+        public async Task<AuthLib.Db.Models.User> AddUser(Model.Api.User user)
         {
             try
             {
-                var dbUser = new Model.Db.User()
+                var dbUser = new AuthLib.Db.Models.User()
                 {
                     Name = user.Name,
                     Password = PasswordHasher.HashPassword(user.Password),
@@ -55,7 +55,7 @@ namespace authService.Services
             }
         }
 
-        public async Task<Model.Db.User> GetUserByName(string name)
+        public async Task<AuthLib.Db.Models.User> GetUserByName(string name)
         {
             try
             {
