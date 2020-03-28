@@ -1,12 +1,6 @@
-# Default values for authentication.
+# Default values for authInit.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-
-authdb:
-  namespace: "myportail"
-
-authInit:
-  namespace: "myportail"
 
 replicaCount: 1
 

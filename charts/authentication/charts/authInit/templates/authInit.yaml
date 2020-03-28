@@ -1,0 +1,30 @@
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: myportail-authinit
+  namespace: {{ .Values.namespace }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: myportail
+        service: authenticationinit
+    spec:
+      containers:
+        - name: authenticationinit
+          image: myportail/authentication-init:latest
+          workingDir: /authInit
+          command: ["dotnet", "authInit.dll"]
+          env:
+            - name: App__authdb__connection__user
+              valueFrom:
+                secretKeyRef:
+                  name: authdbsecrets
+                  key: mysqlusername
+            - name: App__authdb__connection__password
+              valueFrom:
+                secretKeyRef:
+                  name: authdbsecrets
+                  key: mysqlpassword
+      restartPolicy: Never
