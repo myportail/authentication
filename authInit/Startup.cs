@@ -1,4 +1,7 @@
 using System;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading.Tasks;
 using authInit.Contexts;
 using authInit.Services;
@@ -58,7 +61,6 @@ namespace authInit
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
             
             UpdateDb(app).ContinueWith((Task old) => { Environment.Exit(1); });
-
         }
         
         async Task<Boolean> UpdateDb(IApplicationBuilder app)
@@ -76,6 +78,35 @@ namespace authInit
             }
 
             return true;
+        }
+
+        void GetSecrets()
+        {
+            var macos = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = "/usr/local/bin/kubectl",
+                Arguments = "get secret authdbsecrets --namespace=myportail -o jsonpath=\"{.data.mysqlusername}\"",
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            System.Console.WriteLine(startInfo.Arguments);
+
+            var process = new Process()
+            {
+                StartInfo = startInfo
+            };
+
+            process.Start();
+            string encodedResult = process.StandardOutput.ReadToEnd();
+            string result = Encoding.Default.GetString(Convert.FromBase64String(encodedResult));
+
+            System.Console.WriteLine(result);
+
+            process.WaitForExit();
         }
     }
 }
