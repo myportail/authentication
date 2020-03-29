@@ -1,44 +1,79 @@
+using System.Collections.Generic;
 using System.Reflection;
+using authInit.Attributes;
 using Microsoft.Extensions.Logging;
 
 namespace authInit.Diagnostics
 {
     public class SettingsLogger
     {
-        private static int indentSize = 2;
-        public static void LogSettings(string path, object settings, ILogger logger)
+        private ILogger Logger { get; }
+        private Stack<string> Path { get; }
+
+        private string DisplayPath
         {
-            LogSettings(path, 0, settings, logger);
+            get
+            {
+                return string.Join('.', Path);
+            }
         }
 
-        private static void LogSettings(string path, int indent, object settings, ILogger logger)
+        public static void LogSettings(string initialPath, object initialSetting, ILogger logger)
         {
-            var props = settings.GetType().GetProperties();
+            var settingsLogger = new SettingsLogger(logger, initialPath);
+            settingsLogger.Log(initialSetting);
+        }
 
+        private SettingsLogger(
+            ILogger logger,
+            string initialPath)
+        {
+            Logger = logger;
+            Path = new Stack<string>();
+
+            Path.Push(initialPath);
+        }
+
+        private void Log(object setting)
+        {
+            var props = setting.GetType().GetProperties();
             foreach (var prop in props)
             {
-                if (prop.MemberType == MemberTypes.Property)
-                {
-                    LogPropertyInfo(path, indent, settings, prop, logger);
-                }
-                System.Console.WriteLine(prop.Name);
+                LogSettingProperty(setting, prop);
             }
         }
 
-        private static void LogPropertyInfo(string path, int indent, object settings, PropertyInfo prop, ILogger logger)
+        private void LogSettingProperty(object setting, PropertyInfo prop)
         {
-            var indentStr = new string(' ', indent*indentSize);
-            if (prop.PropertyType.IsClass && prop.PropertyType != typeof(string))
+            var attribute = prop.GetCustomAttribute(typeof(LoggableSettings)) as LoggableSettings;
+
+            if (prop.MemberType == MemberTypes.Property && attribute != null)
             {
-                LogSettings($"{path}.{prop.Name}", indent+1, prop.GetValue(settings), logger);
-                return;
+
+                if (prop.PropertyType.IsClass && prop.PropertyType != typeof(string))
+                {
+                    Path.Push(prop.Name);
+                    Log(prop.GetValue(setting));
+                    Path.Pop();
+                }
+
+                if (prop.PropertyType == typeof(string))
+                {
+                    Logger.LogInformation($"{DisplayPath}.{prop.Name} --> {GetPropValue(prop, setting, attribute)}");
+                }
+            }
+        }
+
+        private string GetPropValue(PropertyInfo prop, object setting, LoggableSettings attribute)
+        {
+            var value = prop.GetValue(setting).ToString();
+
+            if (attribute.Output == LoggableSettingOutput.Secured)
+            {
+                return new string('*', value.Length);
             }
 
-            if (prop.PropertyType == typeof(string))
-            {
-                logger.LogInformation($"{indentStr}{path}.{prop.Name} --> {prop.GetValue(settings)}");
-            }
+            return value;
         }
     }
 }
-
