@@ -29,12 +29,20 @@ namespace authInit
             get { return this.Configuration.GetSection("App").Get<Configuration.Application>(); }
         }
 
+        public Configuration.AuthdbSettings AuthdbSettings
+        {
+            get { return this.Configuration.GetSection("authdb").Get<Configuration.AuthdbSettings>(); }
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<Configuration.AuthdbSettings>(Configuration.GetSection("authdb"));
+
+            // Configuration["App:authdb:connection:user"] = "test";
             services.AddDbContext<UserContext>(options =>
             {
-                options.UseMySql(AppConfiguration.AuthDb.Connection.ConnectionString);
+                options.UseMySql(AuthdbSettings.Connection.ConnectionString);
             });
 
             services.AddSingleton<IDatabaseUpdater, DatabaseUpdater>();
@@ -45,7 +53,7 @@ namespace authInit
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
-            logger.LogInformation($"Using DB Connection : server = {AppConfiguration.AuthDb.Connection.Server} / db = {AppConfiguration.AuthDb.Connection.Database} / user = {AppConfiguration.AuthDb.Connection.User}");
+            logger.LogInformation($"Using DB Connection : server = {AuthdbSettings.Connection.Server} / db = {AuthdbSettings.Connection.Database} / user = {AuthdbSettings.Connection.User}");
             
             if (env.IsDevelopment())
             {
@@ -60,6 +68,8 @@ namespace authInit
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
             
+            GetSecrets();
+
             UpdateDb(app).ContinueWith((Task old) => { Environment.Exit(1); });
         }
         
@@ -84,10 +94,13 @@ namespace authInit
         {
             var macos = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
+            System.Console.WriteLine(OSPlatform.Windows);
+            System.Console.WriteLine(OSPlatform.OSX);
+
             var startInfo = new ProcessStartInfo
             {
-                FileName = "/usr/local/bin/kubectl",
-                Arguments = "get secret authdbsecrets --namespace=myportail -o jsonpath=\"{.data.mysqlusername}\"",
+                FileName = "C:\\k8s\\kubectl",
+                Arguments = "get secret authdbsecrets --namespace=myportail -o json",
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
                 CreateNoWindow = true
@@ -101,10 +114,9 @@ namespace authInit
             };
 
             process.Start();
-            string encodedResult = process.StandardOutput.ReadToEnd();
-            string result = Encoding.Default.GetString(Convert.FromBase64String(encodedResult));
+            string jsonResult = process.StandardOutput.ReadToEnd();
 
-            System.Console.WriteLine(result);
+            System.Console.WriteLine(jsonResult);
 
             process.WaitForExit();
         }

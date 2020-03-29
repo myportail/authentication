@@ -21,10 +21,10 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: authdbsecrets
-                  key: mysqlusername
+                  key: authdb.user
             - name: App__authdb__connection__password
               valueFrom:
                 secretKeyRef:
                   name: authdbsecrets
-                  key: mysqlpassword
+                  key: authdb.password
       restartPolicy: Never
