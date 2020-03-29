@@ -1,9 +1,9 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using authInit.Contexts;
+using authInit.Diagnostics;
 using authInit.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,6 +40,7 @@ namespace authInit
             services.Configure<Configuration.AuthdbSettings>(Configuration.GetSection("authdb"));
 
             // Configuration["App:authdb:connection:user"] = "test";
+
             services.AddDbContext<UserContext>(options =>
             {
                 options.UseMySql(AuthdbSettings.Connection.ConnectionString);
@@ -53,6 +54,8 @@ namespace authInit
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
+            SettingsLogger.LogSettings("authdb", AuthdbSettings, logger);
+
             logger.LogInformation($"Using DB Connection : server = {AuthdbSettings.Connection.Server} / db = {AuthdbSettings.Connection.Database} / user = {AuthdbSettings.Connection.User}");
             
             if (env.IsDevelopment())
@@ -68,7 +71,7 @@ namespace authInit
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
             
-            GetSecrets();
+            // GetSecrets();
 
             UpdateDb(app).ContinueWith((Task old) => { Environment.Exit(1); });
         }
