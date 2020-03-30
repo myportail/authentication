@@ -8,13 +8,13 @@ namespace authInit.Diagnostics
     public class SettingsLogger
     {
         private ILogger Logger { get; }
-        private Stack<string> Path { get; }
+        private List<string> Path { get; }
 
         private string DisplayPath
         {
             get
             {
-                return string.Join('.', Path);
+                return string.Join("", Path);
             }
         }
 
@@ -29,9 +29,10 @@ namespace authInit.Diagnostics
             string initialPath)
         {
             Logger = logger;
-            Path = new Stack<string>();
-
-            Path.Push(initialPath);
+            Path = new List<string>()
+            {
+                initialPath
+            };
         }
 
         private void Log(object setting)
@@ -49,15 +50,21 @@ namespace authInit.Diagnostics
 
             if (prop.MemberType == MemberTypes.Property && attribute != null)
             {
-
-                if (prop.PropertyType.IsClass && prop.PropertyType != typeof(string))
+                if (prop.PropertyType.IsGenericType && (prop.PropertyType.GetGenericTypeDefinition() == typeof(List<>)))
                 {
-                    Path.Push(prop.Name);
-                    Log(prop.GetValue(setting));
-                    Path.Pop();
+                    int idx = 0;
+                    var list = prop.GetValue(setting) as IEnumerable<object>;
+                    foreach (var item in list)
+                    {
+                        LogSubItem(idx, item);
+                        idx++;
+                    }
                 }
-
-                if (prop.PropertyType == typeof(string))
+                else if (prop.PropertyType.IsClass && prop.PropertyType != typeof(string))
+                {
+                    LogSubItem(prop.Name, prop.GetValue(setting));
+                }
+                else if (prop.PropertyType == typeof(string))
                 {
                     Logger.LogInformation($"{DisplayPath}.{prop.Name} --> {GetPropValue(prop, setting, attribute)}");
                 }
@@ -74,6 +81,20 @@ namespace authInit.Diagnostics
             }
 
             return value;
+        }
+
+        private void LogSubItem(int index, object setting)
+        {
+            Path.Add($"[{index}]");
+            Log(setting);
+            Path.RemoveAt(Path.Count - 1);
+        }
+
+        private void LogSubItem(string name, object setting)
+        {
+            Path.Add($".{name}");
+            Log(setting);
+            Path.RemoveAt(Path.Count - 1);
         }
     }
 }

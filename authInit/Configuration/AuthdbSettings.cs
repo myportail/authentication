@@ -1,6 +1,6 @@
 using authInit.Attributes;
 
-namespace Configuration
+namespace authInit.Configuration
 {
     public class AuthdbSettings
     {

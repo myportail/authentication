@@ -34,6 +34,11 @@ namespace authInit
             get { return this.Configuration.GetSection("authdb").Get<Configuration.AuthdbSettings>(); }
         }
 
+        public Configuration.KubeCtlSettings KubeCtlSettings
+        {
+            get { return Configuration.GetSection("KubeCtl").Get<Configuration.KubeCtlSettings>(); }
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -55,6 +60,7 @@ namespace authInit
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
             SettingsLogger.LogSettings("authdb", AuthdbSettings, logger);
+            SettingsLogger.LogSettings("KubeCtl", KubeCtlSettings, logger);
 
             logger.LogInformation($"Using DB Connection : server = {AuthdbSettings.Connection.Server} / db = {AuthdbSettings.Connection.Database} / user = {AuthdbSettings.Connection.User}");
             
