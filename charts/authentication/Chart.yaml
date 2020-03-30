@@ -24,6 +24,8 @@ dependencies:
     -   name: authdb
         version: 0.1.0
         repository: "file://./charts/authdb"
+        condition: authdb.enabled
     -   name: authInit
         version: 0.1.0
         repository: "file://./charts/authInit"
+        condition: authInit.enabled

@@ -4,9 +4,11 @@
 
 authdb:
   namespace: "myportail"
+  enabled: true
 
 authInit:
   namespace: "myportail"
+  enabled: false
 
 replicaCount: 1
 

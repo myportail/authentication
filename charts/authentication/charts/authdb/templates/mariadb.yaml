@@ -40,17 +40,17 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: authdbsecrets
-                  key: mysqlusername
+                  key: authdb.user
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: authdbsecrets
-                  key: mysqlpassword
+                  key: authdb.password
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                   secretKeyRef:
                     name: authdbsecrets
-                    key: mysqlrootpassword
+                    key: authdb.rootpassword
       restartPolicy: Always
       initContainers:
         - name: authdb-perm-fix
