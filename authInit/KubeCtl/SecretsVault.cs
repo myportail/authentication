@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
+using Microsoft.Extensions.Configuration;
 
 namespace authInit.KubeCtl
 {
@@ -9,7 +11,7 @@ namespace authInit.KubeCtl
         private Configuration.KubeCtlSettings KubeCtlSettings { get; }
         private Configuration.KubeCtlApplicationSettings KubeCtlAppSettings { get; }
         private string OS { get; }
-        public SecretsVault(Configuration.KubeCtlSettings kubeCtlSettings, ILogger logger)
+        public SecretsVault(Configuration.KubeCtlSettings kubeCtlSettings)
         {
             KubeCtlSettings = kubeCtlSettings;
 
@@ -25,17 +27,17 @@ namespace authInit.KubeCtl
 
             if (string.IsNullOrEmpty(OS))
             {
-                logger.LogError("unable to find current platform");
+                System.Console.WriteLine("unable to find current platform");
             }
 
             KubeCtlAppSettings = kubeCtlSettings.Applications.Find(x => x.OS == OS);
             if (KubeCtlAppSettings == null)
             {
-                logger.LogError($"Unable to find kubectl application settings for platform {OS}");
+                System.Console.WriteLine($"Unable to find kubectl application settings for platform {OS}");
             }
         }
 
-        public void Load(string vaultNamespace, string secretsVaultName)
+        public void Load(string vaultNamespace, string secretsVaultName, IConfiguration configuration)
         {
             var process = new Process()
             {
@@ -51,6 +53,21 @@ namespace authInit.KubeCtl
 
             process.Start();
             string jsonResult = process.StandardOutput.ReadToEnd();
+
+            var jsonDoc = JsonDocument.Parse(jsonResult);
+            var root = jsonDoc.RootElement;
+            var data = root.GetProperty("data");
+            var enumerator = data.EnumerateObject();
+
+            while (enumerator.MoveNext())
+            {
+                var prop = enumerator.Current;
+                var name = prop.Name.Replace('.', ':');
+                var base64Value = prop.Value.GetString();
+                var value = System.Text.Encoding.Default.GetString(System.Convert.FromBase64String(base64Value));
+                configuration[name] = value;
+                System.Console.WriteLine($"found settings {name} = {value}");
+            }
 
             System.Console.WriteLine(jsonResult);
 

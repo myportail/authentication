@@ -21,10 +21,10 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: authdbsecrets
-                  key: authdb.user
+                  key: authdb.connection.user
             - name: App__authdb__connection__password
               valueFrom:
                 secretKeyRef:
                   name: authdbsecrets
-                  key: authdb.password
+                  key: authdb.connection.password
       restartPolicy: Never

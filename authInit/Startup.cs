@@ -42,8 +42,6 @@ namespace authInit
             services.Configure<Configuration.AuthdbSettings>(Configuration.GetSection("authdb"));
             services.Configure<Configuration.KubeCtlSettings>(Configuration.GetSection("KubeCtl"));
 
-            // Configuration["App:authdb:connection:user"] = "test";
-
             services.AddDbContext<UserContext>(options =>
             {
                 options.UseMySql(AuthdbSettings.Connection.ConnectionString);
@@ -57,11 +55,13 @@ namespace authInit
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
-            var vault = new SecretsVault(
-                app.ApplicationServices.GetService<IOptions<Configuration.KubeCtlSettings>>().Value,
-                logger
-            );
-            vault.Load("myportail", "authdbsecrets");
+            if (env.IsDevelopment())
+            {
+                var vault = new SecretsVault(
+                    Configuration.GetSection("KubeCtl").Get<Configuration.KubeCtlSettings>()
+                );
+                vault.Load("myportail", "authdbsecrets", Configuration);
+            }
 
             LogSettings(app, logger);
 
