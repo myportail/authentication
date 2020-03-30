@@ -18,9 +18,9 @@ namespace authInit.Diagnostics
             }
         }
 
-        public static void LogSettings(string initialPath, object initialSetting, ILogger logger)
+        public static void LogSettings(string settingRoot, object initialSetting, ILogger logger)
         {
-            var settingsLogger = new SettingsLogger(logger, initialPath);
+            var settingsLogger = new SettingsLogger(logger, settingRoot);
             settingsLogger.Log(initialSetting);
         }
 

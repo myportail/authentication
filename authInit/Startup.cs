@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using authInit.Contexts;
 using authInit.Diagnostics;
+using authInit.KubeCtl;
 using authInit.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace authInit
 {
@@ -34,15 +36,11 @@ namespace authInit
             get { return this.Configuration.GetSection("authdb").Get<Configuration.AuthdbSettings>(); }
         }
 
-        public Configuration.KubeCtlSettings KubeCtlSettings
-        {
-            get { return Configuration.GetSection("KubeCtl").Get<Configuration.KubeCtlSettings>(); }
-        }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<Configuration.AuthdbSettings>(Configuration.GetSection("authdb"));
+            services.Configure<Configuration.KubeCtlSettings>(Configuration.GetSection("KubeCtl"));
 
             // Configuration["App:authdb:connection:user"] = "test";
 
@@ -59,10 +57,15 @@ namespace authInit
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
-            SettingsLogger.LogSettings("authdb", AuthdbSettings, logger);
-            SettingsLogger.LogSettings("KubeCtl", KubeCtlSettings, logger);
+            var vault = new SecretsVault(
+                app.ApplicationServices.GetService<IOptions<Configuration.KubeCtlSettings>>().Value,
+                logger
+            );
+            vault.Load("myportail", "authdbsecrets");
 
-            logger.LogInformation($"Using DB Connection : server = {AuthdbSettings.Connection.Server} / db = {AuthdbSettings.Connection.Database} / user = {AuthdbSettings.Connection.User}");
+            LogSettings(app, logger);
+
+            // logger.LogInformation($"Using DB Connection : server = {AuthdbSettings.Connection.Server} / db = {AuthdbSettings.Connection.Database} / user = {AuthdbSettings.Connection.User}");
             
             if (env.IsDevelopment())
             {
@@ -128,6 +131,18 @@ namespace authInit
             System.Console.WriteLine(jsonResult);
 
             process.WaitForExit();
+        }
+
+        private void LogSettings(IApplicationBuilder app, ILogger logger)
+        {
+            SettingsLogger.LogSettings(
+                "authdb", 
+                app.ApplicationServices.GetService<IOptions<Configuration.AuthdbSettings>>().Value, 
+                logger);
+            SettingsLogger.LogSettings(
+                "KubeCtl",
+                app.ApplicationServices.GetService<IOptions<Configuration.KubeCtlSettings>>().Value, 
+                logger);
         }
     }
 }
