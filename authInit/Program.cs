@@ -34,6 +34,7 @@ namespace authInit
             if (kubeCtlSettings != null)
             {
                 builder.Add(new KubeCtl.SecretsSource(kubeCtlSettings, "myportail", "authdbsecrets"));
+                builder.Add(new KubeCtl.SecretsSource(kubeCtlSettings, "myportail", "defaultuser-secrets"));
             }
         }
     }
