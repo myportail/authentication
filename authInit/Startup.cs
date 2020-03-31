@@ -1,11 +1,10 @@
 using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using authInit.Contexts;
 using authInit.Diagnostics;
-using authInit.KubeCtl;
 using authInit.Services;
+using Authlib.Configuration;
+using Authlib.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +35,7 @@ namespace authInit
         {
             services.Configure<Configuration.AuthdbSettings>(Configuration.GetSection("authdb"));
             services.Configure<Configuration.KubeCtlSettings>(Configuration.GetSection("KubeCtl"));
+            services.Configure<TokenGenerationSettings>(Configuration.GetSection("TokenGeneration"));
 
             services.AddDbContext<UserContext>(options =>
             {
@@ -43,6 +43,7 @@ namespace authInit
             });
 
             services.AddSingleton<IDatabaseUpdater, DatabaseUpdater>();
+            services.AddSingleton<IPasswordHasher, PasswordHasher>();
 
             services.AddControllers();
         }
@@ -52,8 +53,6 @@ namespace authInit
         {
             LogSettings(app, logger);
 
-            // logger.LogInformation($"Using DB Connection : server = {AuthdbSettings.Connection.Server} / db = {AuthdbSettings.Connection.Database} / user = {AuthdbSettings.Connection.User}");
-            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -67,11 +66,9 @@ namespace authInit
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
             
-            // GetSecrets();
-
             UpdateDb(app).ContinueWith((Task old) => { Environment.Exit(1); });
         }
-        
+
         async Task<Boolean> UpdateDb(IApplicationBuilder app)
         {
             try
@@ -88,7 +85,7 @@ namespace authInit
 
             return true;
         }
-        
+
         private void LogSettings(IApplicationBuilder app, ILogger logger)
         {
             SettingsLogger.LogSettings(

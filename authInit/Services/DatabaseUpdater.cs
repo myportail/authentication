@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using authInit.Contexts;
+using AuthLib.Db.Models;
+using Authlib.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,13 +14,16 @@ namespace authInit.Services
     {
         private ILogger Logger { get; }
         private IServiceProvider ServiceProvider { get; }
-        
+        private IPasswordHasher PasswordHasher { get; }
+
         public DatabaseUpdater(
             ILogger<DatabaseUpdater> logger,
-            IServiceProvider serviceProvider )
+            IServiceProvider serviceProvider,
+            IPasswordHasher passwordHasher)
         {
             Logger = logger;
             ServiceProvider = serviceProvider;
+            PasswordHasher = passwordHasher;
 
             Logger.LogInformation("DatabaseUpdater creation");
         }
@@ -47,6 +52,8 @@ namespace authInit.Services
                 using var scope = ServiceProvider.CreateScope();
                 var context = scope.ServiceProvider.GetService<UserContext>();
                 await context.Database.MigrateAsync();
+                
+                await CreateDefaultAdminUser(context);
             }
             catch (Exception e)
             {
@@ -56,5 +63,18 @@ namespace authInit.Services
             return true;
         }
 
+        private async Task CreateDefaultAdminUser(UserContext  userContext)
+        {
+            var existingAdminUser = await userContext.Users.FirstOrDefaultAsync(x => x.Name.Equals("Admin", StringComparison.InvariantCultureIgnoreCase));
+            if (existingAdminUser == null)
+            {
+                var user = new User();
+                user.Id = new Guid().ToString();
+                user.Name = "Admin";
+                user.Password = PasswordHasher.HashPassword("Admin@123");
+                await userContext.Users.AddAsync(user);
+                await userContext.SaveChangesAsync();
+            }
+        }
     }
 }

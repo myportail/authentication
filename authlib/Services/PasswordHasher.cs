@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Text;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.Extensions.Options;
 
-namespace authService.Services
+namespace Authlib.Services
 {
     public class PasswordHasher : IPasswordHasher
     {
-        Settings.Application AppSettings { get; }
+        private Configuration.TokenGenerationSettings TokenGenerationSettings { get; }
 
-        public PasswordHasher(
-            Settings.Application appSettings )
+        public PasswordHasher(IOptions<Configuration.TokenGenerationSettings> tokenGenerationSettings)
         {
-            AppSettings = appSettings;
+            TokenGenerationSettings = tokenGenerationSettings.Value;
         }
         
         public string HashPassword(string password)
@@ -19,7 +19,7 @@ namespace authService.Services
             // derive a 256-bit subkey (use HMACSHA1 with 10,000 iterations)
             string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                 password: password,
-                salt: Encoding.ASCII.GetBytes(AppSettings.TokenGeneration.SecurityKey),
+                salt: Encoding.ASCII.GetBytes(TokenGenerationSettings.SecurityKey),
                 prf: KeyDerivationPrf.HMACSHA1,
                 iterationCount: 10000,
                 numBytesRequested: 256 / 8));

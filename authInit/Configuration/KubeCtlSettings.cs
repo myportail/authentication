@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using authInit.Attributes;
+using Authlib.Attributes;
 
 namespace authInit.Configuration
 {

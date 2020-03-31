@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace authInit.Attributes
+namespace Authlib.Attributes
 {
     public class LoggableSettings : Attribute
     {

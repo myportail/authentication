@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Reflection;
-using authInit.Attributes;
+using Authlib.Attributes;
 using Microsoft.Extensions.Logging;
 
 namespace authInit.Diagnostics

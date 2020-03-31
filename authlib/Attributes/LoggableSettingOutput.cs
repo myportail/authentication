@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace authInit.Attributes
+﻿namespace Authlib.Attributes
 {
     public enum LoggableSettingOutput
     {
