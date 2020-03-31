@@ -19,11 +19,22 @@ namespace authInit
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hostingContext, config) => { config.AddEnvironmentVariables().Build(); })
+                .ConfigureAppConfiguration((hostingContext, config) => { AddKubeCtlConfiguration(hostingContext, config); })
                 .ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();
                     logging.AddConsole();
                 })
                 .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
+
+        private static void AddKubeCtlConfiguration(HostBuilderContext context, IConfigurationBuilder builder)
+        {
+            var configuration = builder.Build();
+            var kubeCtlSettings = configuration.GetSection("KubeCtl").Get<Configuration.KubeCtlSettings>();
+            if (kubeCtlSettings != null)
+            {
+                builder.Add(new KubeCtl.SecretsSource(kubeCtlSettings, "myportail", "authdbsecrets"));
+            }
+        }
     }
 }

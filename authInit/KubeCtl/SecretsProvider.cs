@@ -11,7 +11,10 @@ namespace authInit.KubeCtl
         private Configuration.KubeCtlSettings KubeCtlSettings { get; }
         private string VaultNamespace { get; }
         private string SecretsVaultName { get; }
-        public SecretsProvider(Configuration.KubeCtlSettings kubeCtlSettings, string vaultNamespace, string secretsVaultName)
+        public SecretsProvider(
+            Configuration.KubeCtlSettings kubeCtlSettings,
+            string vaultNamespace,
+            string secretsVaultName)
         {
             KubeCtlSettings = kubeCtlSettings;
             VaultNamespace = vaultNamespace;

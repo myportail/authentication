@@ -55,13 +55,13 @@ namespace authInit
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
-            if (env.IsDevelopment())
-            {
-                var vault = new SecretsVault(
-                    Configuration.GetSection("KubeCtl").Get<Configuration.KubeCtlSettings>()
-                );
-                vault.Load("myportail", "authdbsecrets", Configuration);
-            }
+            // if (env.IsDevelopment())
+            // {
+            //     var vault = new SecretsVault(
+            //         Configuration.GetSection("KubeCtl").Get<Configuration.KubeCtlSettings>()
+            //     );
+            //     vault.Load("myportail", "authdbsecrets", Configuration);
+            // }
 
             LogSettings(app, logger);
 
