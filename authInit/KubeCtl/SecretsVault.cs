@@ -1,12 +1,12 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using Microsoft.Extensions.Configuration;
+using System;
 
 namespace authInit.KubeCtl
 {
-    public class SecretsVault
+  public class SecretsVault
     {
         private Configuration.KubeCtlSettings KubeCtlSettings { get; }
         private Configuration.KubeCtlApplicationSettings KubeCtlAppSettings { get; }
@@ -30,7 +30,7 @@ namespace authInit.KubeCtl
                 System.Console.WriteLine("unable to find current platform");
             }
 
-            KubeCtlAppSettings = kubeCtlSettings.Applications.Find(x => x.OS == OS);
+            KubeCtlAppSettings = kubeCtlSettings.Applications.Find(x => x.OS.Equals(OS, StringComparison.InvariantCultureIgnoreCase));
             if (KubeCtlAppSettings == null)
             {
                 System.Console.WriteLine($"Unable to find kubectl application settings for platform {OS}");
