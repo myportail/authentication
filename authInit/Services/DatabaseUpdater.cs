@@ -1,12 +1,14 @@
 using System;
 using System.Threading.Tasks;
 using authInit.Contexts;
+using Authlib.Configuration;
 using AuthLib.Db.Models;
 using Authlib.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace authInit.Services
 {
@@ -14,16 +16,19 @@ namespace authInit.Services
     {
         private ILogger Logger { get; }
         private IServiceProvider ServiceProvider { get; }
-        private IPasswordHasher PasswordHasher { get; }
+        private IPasswordHasher PasswordHasher { get; } 
+        private DefaultUserSettings DefaultUserSettings { get; }
 
         public DatabaseUpdater(
             ILogger<DatabaseUpdater> logger,
             IServiceProvider serviceProvider,
-            IPasswordHasher passwordHasher)
+            IPasswordHasher passwordHasher,
+            IOptions<DefaultUserSettings> defaultUserSettings )
         {
             Logger = logger;
             ServiceProvider = serviceProvider;
             PasswordHasher = passwordHasher;
+            DefaultUserSettings = defaultUserSettings.Value;
 
             Logger.LogInformation("DatabaseUpdater creation");
         }
@@ -66,12 +71,12 @@ namespace authInit.Services
         private async Task CreateDefaultAdminUser(UserContext  userContext)
         {
             var existingAdminUser = await userContext.Users.FirstOrDefaultAsync(x => x.Name.Equals("Admin", StringComparison.InvariantCultureIgnoreCase));
-            if (existingAdminUser == null)
+            if (existingAdminUser == null && !String.IsNullOrEmpty(DefaultUserSettings.Username) && !String.IsNullOrEmpty(DefaultUserSettings.Password))
             {
                 var user = new User();
                 user.Id = new Guid().ToString();
-                user.Name = "Admin";
-                user.Password = PasswordHasher.HashPassword("Admin@123");
+                user.Name = DefaultUserSettings.Username;
+                user.Password = PasswordHasher.HashPassword(DefaultUserSettings.Password);
                 await userContext.Users.AddAsync(user);
                 await userContext.SaveChangesAsync();
             }

@@ -36,6 +36,7 @@ namespace authInit
             services.Configure<Configuration.AuthdbSettings>(Configuration.GetSection("authdb"));
             services.Configure<Configuration.KubeCtlSettings>(Configuration.GetSection("KubeCtl"));
             services.Configure<TokenGenerationSettings>(Configuration.GetSection("TokenGeneration"));
+            services.Configure<DefaultUserSettings>(Configuration.GetSection("DefaultUser"));
 
             services.AddDbContext<UserContext>(options =>
             {
@@ -95,6 +96,14 @@ namespace authInit
             SettingsLogger.LogSettings(
                 "KubeCtl",
                 app.ApplicationServices.GetService<IOptions<Configuration.KubeCtlSettings>>().Value, 
+                logger);
+            SettingsLogger.LogSettings(
+                "TokenGeneration",
+                app.ApplicationServices.GetService<IOptions<TokenGenerationSettings>>().Value, 
+                logger);
+            SettingsLogger.LogSettings(
+                "DefaultUser",
+                app.ApplicationServices.GetService<IOptions<DefaultUserSettings>>().Value, 
                 logger);
         }
     }
