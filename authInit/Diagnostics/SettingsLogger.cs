@@ -54,10 +54,13 @@ namespace authInit.Diagnostics
                 {
                     int idx = 0;
                     var list = prop.GetValue(setting) as IEnumerable<object>;
-                    foreach (var item in list)
+                    if (list != null)
                     {
+                      foreach (var item in list)
+                      {
                         LogSubItem(idx, item);
                         idx++;
+                      }
                     }
                 }
                 else if (prop.PropertyType.IsClass && prop.PropertyType != typeof(string))
@@ -73,14 +76,14 @@ namespace authInit.Diagnostics
 
         private string GetPropValue(PropertyInfo prop, object setting, LoggableSettings attribute)
         {
-            var value = prop.GetValue(setting).ToString();
+          var value = prop.GetValue(setting)?.ToString();
 
-            if (attribute.Output == LoggableSettingOutput.Secured)
-            {
-                return new string('*', value.Length);
-            }
+          if (attribute.Output == LoggableSettingOutput.Secured && value != null)
+          {
+              return new string('*', value.Length);
+          }
 
-            return value;
+          return value;
         }
 
         private void LogSubItem(int index, object setting)
