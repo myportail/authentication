@@ -26,11 +26,6 @@ namespace authInit
 
         public IConfiguration Configuration { get; }
 
-        public Configuration.Application AppConfiguration
-        {
-            get { return this.Configuration.GetSection("App").Get<Configuration.Application>(); }
-        }
-
         public Configuration.AuthdbSettings AuthdbSettings
         {
             get { return this.Configuration.GetSection("authdb").Get<Configuration.AuthdbSettings>(); }
@@ -55,14 +50,6 @@ namespace authInit
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
-            // if (env.IsDevelopment())
-            // {
-            //     var vault = new SecretsVault(
-            //         Configuration.GetSection("KubeCtl").Get<Configuration.KubeCtlSettings>()
-            //     );
-            //     vault.Load("myportail", "authdbsecrets", Configuration);
-            // }
-
             LogSettings(app, logger);
 
             // logger.LogInformation($"Using DB Connection : server = {AuthdbSettings.Connection.Server} / db = {AuthdbSettings.Connection.Database} / user = {AuthdbSettings.Connection.User}");
@@ -101,38 +88,7 @@ namespace authInit
 
             return true;
         }
-
-        void GetSecrets()
-        {
-            var macos = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
-
-            System.Console.WriteLine(OSPlatform.Windows);
-            System.Console.WriteLine(OSPlatform.OSX);
-
-            var startInfo = new ProcessStartInfo
-            {
-                FileName = "C:\\k8s\\kubectl",
-                Arguments = "get secret authdbsecrets --namespace=myportail -o json",
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
-
-            System.Console.WriteLine(startInfo.Arguments);
-
-            var process = new Process()
-            {
-                StartInfo = startInfo
-            };
-
-            process.Start();
-            string jsonResult = process.StandardOutput.ReadToEnd();
-
-            System.Console.WriteLine(jsonResult);
-
-            process.WaitForExit();
-        }
-
+        
         private void LogSettings(IApplicationBuilder app, ILogger logger)
         {
             SettingsLogger.LogSettings(
