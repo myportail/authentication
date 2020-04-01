@@ -17,14 +17,16 @@ spec:
           workingDir: /authInit
           command: ["dotnet", "authInit.dll"]
           env:
-            - name: App__authdb__connection__user
+            - name: authdb__connection__user
               valueFrom:
                 secretKeyRef:
                   name: authdbsecrets
                   key: authdb.connection.user
-            - name: App__authdb__connection__password
+            - name: authdb__connection__password
               valueFrom:
                 secretKeyRef:
                   name: authdbsecrets
                   key: authdb.connection.password
+            - name: authdb__connection__server
+              value: authdbservice
       restartPolicy: Never

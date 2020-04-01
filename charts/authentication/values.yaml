@@ -8,7 +8,7 @@ authdb:
 
 authInit:
   namespace: "myportail"
-  enabled: false
+  enabled: true
 
 replicaCount: 1
 
