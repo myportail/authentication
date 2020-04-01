@@ -27,6 +27,14 @@ spec:
                 secretKeyRef:
                   name: authdbsecrets
                   key: authdb.connection.password
-            - name: authdb__connection__server
-              value: authdbservice
+            - name: defaultuser__username
+              valueFrom:
+                secretKeyRef:
+                  name: defaultuser-secrets
+                  key: defaultuser.username
+            - name: defaultuser__password
+              valueFrom:
+                secretKeyRef:
+                  name: defaultuser-secrets
+                  key: defaultuser.password
       restartPolicy: Never
