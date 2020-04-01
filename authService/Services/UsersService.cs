@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Authlib.Services;
 using authService.Contexts;
 using authService.Model.Api;
 using authService.Settings;

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Authlib.Services;
 using authService.Exceptions;
 using authService.Settings;
 using Microsoft.Extensions.Configuration;
@@ -17,14 +18,14 @@ namespace authService.Services
     public class AuthService : IAuthService
     {
         private Settings.Application AppSettings { get; }
-        private Services.IPasswordHasher PasswordHasher { get; }
+        private IPasswordHasher PasswordHasher { get; }
         
         private IMongoDbService MongoDbService { get; }
 
         public AuthService(
             IMongoDbService mongoDbService,
             Settings.Application appSettings,
-            Services.IPasswordHasher passwordHasher )
+            IPasswordHasher passwordHasher )
         {
             AppSettings = appSettings;
             MongoDbService = mongoDbService;
