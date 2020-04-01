@@ -43,19 +43,22 @@ namespace authInit.KubeCtl
 
             System.Console.WriteLine(jsonResult);
 
-            var jsonDoc = JsonDocument.Parse(jsonResult);
-            var root = jsonDoc.RootElement;
-            var data = root.GetProperty("data");
-            var enumerator = data.EnumerateObject();
-
-            while (enumerator.MoveNext())
+            if (!string.IsNullOrEmpty(jsonResult))
             {
-                var prop = enumerator.Current;
-                var name = prop.Name.Replace('.', ':');
-                var base64Value = prop.Value.GetString();
-                var value = System.Text.Encoding.Default.GetString(System.Convert.FromBase64String(base64Value));
-                Data[name] = value;
-                System.Console.WriteLine($"found settings {name} = {value}");
+                var jsonDoc = JsonDocument.Parse(jsonResult);
+                var root = jsonDoc.RootElement;
+                var data = root.GetProperty("data");
+                var enumerator = data.EnumerateObject();
+
+                while (enumerator.MoveNext())
+                {
+                    var prop = enumerator.Current;
+                    var name = prop.Name.Replace('.', ':');
+                    var base64Value = prop.Value.GetString();
+                    var value = System.Text.Encoding.Default.GetString(System.Convert.FromBase64String(base64Value));
+                    Data[name] = value;
+                    System.Console.WriteLine($"found settings {name} = {value}");
+                }
             }
         }
 

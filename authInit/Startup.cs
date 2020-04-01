@@ -25,10 +25,9 @@ namespace authInit
 
         public IConfiguration Configuration { get; }
 
-        public Configuration.AuthdbSettings AuthdbSettings
-        {
-            get { return this.Configuration.GetSection("authdb").Get<Configuration.AuthdbSettings>(); }
-        }
+        public Configuration.AuthdbSettings AuthdbSettings => this.Configuration.GetSection("authdb").Get<Configuration.AuthdbSettings>();
+
+        private string Version => this.Configuration.GetSection("Version").Get<string>();
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -52,6 +51,7 @@ namespace authInit
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
+            logger.LogInformation($"Version : {Version}");
             LogSettings(app, logger);
 
             if (env.IsDevelopment())
