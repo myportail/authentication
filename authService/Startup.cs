@@ -16,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -64,22 +65,26 @@ namespace authService
                             Encoding.UTF8.GetBytes(AppSettings.TokenGeneration.SecurityKey))
                     };
                 });
-            // services.AddSwaggerGen(c =>
-            // {
-            //     c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
-            //     c.AddSecurityDefinition("oauth2", new ApiKeyScheme
-            //     {
-            //         Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-            //         Name = "Authorization",
-            //         In = "header",
-            //         Type = "apiKey"
-            //     });
-            //     c.OperationFilter<SecurityRequirementsOperationFilter>();
-            //     
-            // });
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo()
+                {
+                    Title = "My API",
+                    Version = "v1"
+                });
+                // c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+                c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey
+                });
+                c.OperationFilter<SecurityRequirementsOperationFilter>();
+                
+            });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            
-            
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -94,13 +99,18 @@ namespace authService
                     app.UseDeveloperExceptionPage();
                 }
 
-                // app.UseSwagger();
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                });
+
                 app.UseAuthentication();
-
-                // app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"); });
-
+                
                 app.UseDefaultFiles();
-                // app.UseStaticFiles();
+                app.UseStaticFiles();
+
+
                 app.UseRouting();
                 app.UseAuthorization();
                 app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
