@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myportail-auth
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: myportail
+  template:
+    metadata:
+      labels:
+        app: myportail
+        service: auth
+      containers:
+        - name: auth
+          image: myportail/auth-service
+          resources:
+            limits:
+              memory: "250M"
+              cpu: "0.5"
+          ports:
+            - containerPort: 8001
+          env:
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: authdbsecrets
+                  key: authdb.connection.user
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: authdbsecrets
+                  key: authdb.connection.password
+      restartPolicy: Always
