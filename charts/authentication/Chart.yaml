@@ -29,3 +29,7 @@ dependencies:
         version: 0.1.0
         repository: "file://./charts/authInit"
         condition: authInit.enabled
+    -   name: authService
+        version: 0.1.0
+        repository: "file://./charts/authService"
+        condition: authService.enabled
