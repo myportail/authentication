@@ -1,4 +1,5 @@
-def image
+def authInitImage
+def authServiceImage
 
 pipeline {
     agent any
@@ -13,7 +14,7 @@ pipeline {
         stage('build authentication-init') {
             steps {
                 script {
-                    image = docker.build("myportail/authentication-init:1.0.${env.BUILD_ID}", "-f ./Docker/authInit/Dockerfile .")
+                    authInitImage = docker.build("myportail/authentication-init:1.0.${env.BUILD_ID}", "-f ./Docker/authInit/Dockerfile .")
                 }
             }
         }
@@ -21,7 +22,7 @@ pipeline {
         stage('build authentication-service') {
             steps {
                 script {
-                    image = docker.build("myportail/auth-service:1.0.${env.BUILD_ID}", "-f ./Docker/authService/Dockerfile .")
+                    authServiceImage = docker.build("myportail/auth-service:1.0.${env.BUILD_ID}", "-f ./Docker/authService/Dockerfile .")
                 }
             }
         }
@@ -30,7 +31,17 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry("", "dockerhub") {
-                        image.push()
+                        authInitImage.push()
+                    }
+                }
+            }
+        }
+
+        stage('push authentication-service') {
+            steps {
+                script {
+                    docker.withRegistry("", "dockerhub") {
+                        authServiceImage.push()
                     }
                 }
             }
