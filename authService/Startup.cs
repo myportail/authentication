@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Text;
-using System.Threading.Tasks;
-using authInit.Diagnostics;
+using Authlib.Configuration;
+using Authlib.Diagnostics;
 using Authlib.Services;
 using authService.Contexts;
-using authService.Model.Api;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,7 +17,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
-using Swashbuckle.AspNetCore.Swagger;
 
 namespace authService
 {
@@ -35,34 +33,37 @@ namespace authService
         public IConfiguration Configuration { get; }
         public Settings.Application AppSettings { get; }
         
-        public Configuration.AuthdbSettings AuthdbSettings => this.Configuration.GetSection("authdb").Get<Configuration.AuthdbSettings>();
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<Configuration.AuthdbSettings>(Configuration.GetSection("authdb"));
+            services.Configure<TokenGenerationSettings>(Configuration.GetSection("TokenGeneration"));
 
             // services.AddMvc();
             services.AddCors();
             
-            services.AddDbContext<UserContext>(options => options.UseMySql(AuthdbSettings.Connection.ConnectionString));
+            services.AddDbContext<UserContext>(options =>
+            {
+                var authdb = Configuration.GetSection("authdb").Get<Configuration.AuthdbSettings>();
+                options.UseMySql(authdb.Connection.ConnectionString);
+            });
             services.AddScoped<Services.IUsersService, Services.UsersService>();
             services.AddScoped<Services.IAuthService, Services.AuthService>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
-            services.AddScoped<Services.IMongoDbService, Services.StubMongoDbService>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
+                    var tokenGeneration = Configuration.GetSection("TokenGeneration").Get<TokenGenerationSettings>();
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = AppSettings.TokenGeneration.Issuer,
-                        ValidAudience = AppSettings.TokenGeneration.Audience,
+                        ValidIssuer = tokenGeneration.Issuer,
+                        ValidAudience = tokenGeneration.Audience,
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(AppSettings.TokenGeneration.SecurityKey))
+                            Encoding.UTF8.GetBytes(tokenGeneration.SecurityKey))
                     };
                 });
             services.AddSwaggerGen(c =>

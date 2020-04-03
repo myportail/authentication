@@ -6,10 +6,12 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Authlib.Configuration;
 using Authlib.Services;
 using authService.Exceptions;
 using authService.Settings;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 
@@ -17,19 +19,20 @@ namespace authService.Services
 {
     public class AuthService : IAuthService
     {
-        private Settings.Application AppSettings { get; }
         private IPasswordHasher PasswordHasher { get; }
         
-        private IMongoDbService MongoDbService { get; }
+        private TokenGenerationSettings TokenGenerationSettings { get; }
+        
+        private IUsersService UsersService { get; }
 
         public AuthService(
-            IMongoDbService mongoDbService,
-            Settings.Application appSettings,
+            IOptions<TokenGenerationSettings> tokenGenerationSettings,
+            IUsersService usersService,
             IPasswordHasher passwordHasher )
         {
-            AppSettings = appSettings;
-            MongoDbService = mongoDbService;
             PasswordHasher = passwordHasher;
+            TokenGenerationSettings = tokenGenerationSettings.Value;
+            UsersService = usersService;
         }
 
         public async Task<JwtSecurityToken> CreateToken(Model.Api.LoginCredentials credentials)
@@ -38,16 +41,7 @@ namespace authService.Services
             {
                 List<Model.MongoDb.User> users = null;
                 
-                using (var usersQuery =
-                    await MongoDbService.UsersCollection.FindAsync(x => x.Name.Equals(credentials.Username)))
-                {
-                    users = usersQuery.ToList();
-                };
-
-                if (!users.Any())
-                    throw new Exception("unkown user");
-
-                var user = users.First();
+                var user = await UsersService.GetUserByName(credentials.Username);
 
                 var hashedPwd = PasswordHasher.HashPassword(credentials.Password);
                 if (!user.Password.Equals(hashedPwd))
@@ -59,12 +53,12 @@ namespace authService.Services
                     new Claim("username", user.Name)
                 };
 
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppSettings.TokenGeneration.SecurityKey));
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(TokenGenerationSettings.SecurityKey));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
                 var token = new JwtSecurityToken(
-                    issuer: AppSettings.TokenGeneration.Issuer,
-                    audience: AppSettings.TokenGeneration.Audience,
+                    issuer: TokenGenerationSettings.Issuer,
+                    audience: TokenGenerationSettings.Audience,
                     claims: claims,
                     expires: DateTime.Now.AddMinutes(30),
                     signingCredentials: creds);

@@ -6,5 +6,9 @@ namespace Authlib.Configuration
     {
         [LoggableSettings()]
         public string SecurityKey { get; set; }
+        [LoggableSettings]
+        public string Issuer { get; set; }
+        [LoggableSettings]
+        public string Audience { get; set; }
     }
 }

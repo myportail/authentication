@@ -5,10 +5,6 @@ using System.Threading.Tasks;
 using Authlib.Services;
 using authService.Contexts;
 using authService.Model.Api;
-using authService.Settings;
-using Microsoft.EntityFrameworkCore;
-using MongoDB.Driver;
-using Swashbuckle.AspNetCore.Swagger;
 
 namespace authService.Services
 {
@@ -16,20 +12,14 @@ namespace authService.Services
     {
         private IPasswordHasher PasswordHasher { get; }
         
-        private IMongoDbService MongoDbService { get; }
-        
         private UserContext UserContext { get; }
-
-        private IMongoCollection<Model.MongoDb.User> UsersCollection => MongoDbService.Database.GetCollection<Model.MongoDb.User>("authUsers");
-
+        
         public UsersService(
-            IMongoDbService mongoDbService,
             IPasswordHasher passwordHasher,
             UserContext userContext)
         {
             UserContext = userContext;
             PasswordHasher = passwordHasher;
-            MongoDbService = mongoDbService;
         }
 
         public async Task<AuthLib.Db.Models.User> AddUser(Model.Api.User user)
@@ -45,7 +35,6 @@ namespace authService.Services
 
                 await UserContext.Users.AddAsync(dbUser);
                 await UserContext.SaveChangesAsync();
-//                await UsersCollection.InsertOneAsync(mongoDbUser);
                                 
                 return dbUser;
             }
@@ -67,15 +56,6 @@ namespace authService.Services
                 }
 
                 return null;
-//                using (var result = await UsersCollection.FindAsync(x => x.Name == name))
-//                {
-//                    var users = result.ToList();
-//
-//                    if (users.Count > 0)
-//                        return users.First();
-//
-//                    return null;
-//                };
             }
             catch (Exception ex)
             {
@@ -88,27 +68,13 @@ namespace authService.Services
         {
             try
             {
-                using (var results = await UsersCollection.FindAsync(Builders<Model.MongoDb.User>.Filter.Empty))
-                {
-                    var dbUsers = results.ToList();
-                
-                    var users = new List<User>();
-                
-                    dbUsers.ForEach(dbUser =>
-                    {
-                        users.Add(new User()
-                        {
-                            Id = dbUser.Id,
-                            Name = dbUser.Name
-                        });
-                    });
-                
-                    return users;
-                }
+                var users = new List<User>();
+            
+                return users;
             }
             catch (Exception ex)
             {
-                System.Console.Error.WriteLine(ex.ToString());
+                Console.Error.WriteLine(ex.ToString());
                 throw;
             }
         }

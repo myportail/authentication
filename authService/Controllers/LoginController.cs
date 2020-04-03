@@ -11,16 +11,13 @@ namespace authService.Controllers
     {
         private Services.IAuthService AuthService { get; }
         private IPasswordHasher PasswordHasher { get; }
-        private Services.IMongoDbService MongoDbService { get; }
 
         public LoginController(
             Services.IAuthService authService,
-            IPasswordHasher passwordHasher,
-            Services.IMongoDbService mongoDbService)
+            IPasswordHasher passwordHasher)
         {
             AuthService = authService;
             PasswordHasher = passwordHasher;
-            MongoDbService = mongoDbService;
         }
 
         [HttpPost]

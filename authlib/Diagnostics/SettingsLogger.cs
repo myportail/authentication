@@ -3,7 +3,7 @@ using System.Reflection;
 using Authlib.Attributes;
 using Microsoft.Extensions.Logging;
 
-namespace authInit.Diagnostics
+namespace Authlib.Diagnostics
 {
     public class SettingsLogger
     {

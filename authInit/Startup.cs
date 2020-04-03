@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
 using authInit.Contexts;
-using authInit.Diagnostics;
 using authInit.Services;
 using Authlib.Configuration;
+using Authlib.Diagnostics;
 using Authlib.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
