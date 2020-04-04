@@ -12,15 +12,18 @@ spec:
       labels:
         app: myportail
         service: auth
+    spec:
       containers:
         - name: auth
           image: myportail/auth-service
+          workingDir: /authService
+          command: ["dotnet", "authService.dll"]
           resources:
             limits:
               memory: "250M"
               cpu: "0.5"
           ports:
-            - containerPort: 8001
+            - containerPort: 443
           env:
             - name: MYSQL_USER
               valueFrom:
