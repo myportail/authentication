@@ -5,11 +5,11 @@ COPY ./authService ./authService
 WORKDIR /src/authService
 RUN dotnet restore -nowarn:msb3202,nu1503
 RUN dotnet build -c Debug -o /app
+RUN dotnet dev-certs https -ep /app/aspnetapp.pfx -p "httpscert"
+RUN dotnet dev-certs https --trust
 
 FROM build AS publish
 RUN dotnet publish -c Release -o /app
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 as final
 COPY --from=publish /app /authService
-RUN dotnet dev-certs https -ep ${HOME}/.aspnet/https/aspnetapp.pfx -p "httpscert"
-RUN dotnet dev-certs https --trust

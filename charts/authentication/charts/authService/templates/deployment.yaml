@@ -28,7 +28,7 @@ spec:
             - name: ASPNETCORE_Kestrel__Certificates__Default__Password
               value: httpscert
             - name: ASPNETCORE_Kestrel__Certificates__Default__Path
-              value: /https/aspnetapp.pfx
+              value: /app/aspnetapp.pfx
             - name: MYSQL_USER
               valueFrom:
                 secretKeyRef:
