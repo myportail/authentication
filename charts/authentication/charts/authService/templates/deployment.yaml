@@ -25,6 +25,10 @@ spec:
           ports:
             - containerPort: 8001
           env:
+            - name: ASPNETCORE_Kestrel__Certificates__Default__Password
+              value: httpscert
+            - name: ASPNETCORE_Kestrel__Certificates__Default__Path
+              value: /https/aspnetapp.pfx
             - name: MYSQL_USER
               valueFrom:
                 secretKeyRef:
