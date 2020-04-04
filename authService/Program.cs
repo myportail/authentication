@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace authService
@@ -17,45 +18,29 @@ namespace authService
     {
         public static void Main(string[] args)
         {
-            var host = BuildWebHost(args);
-            
-            host.Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args)
-        {
-            var envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            Console.WriteLine($"environment name: '{envName}'");
-
-            var envHostFilename = $"hosting.{envName}.json";
-            Console.WriteLine($"environment host filename: '{envHostFilename}'");
-
-            var configurationBuilder = new ConfigurationBuilder()
-              .AddJsonFile("hosting.json", optional: false, reloadOnChange: true);
-
-            if (envName != null)
-            {
-                configurationBuilder
-                    .AddJsonFile($"hosting.{envName}.json", optional: true, reloadOnChange: true);
-            }
-
-            var configuration = configurationBuilder
-              .AddCommandLine(args)
-              .Build();
-
-            //var appConfig = new Settings.Application();
-            //configuration.GetSection("App").Bind(appConfig);
-
-            return WebHost.CreateDefaultBuilder(args)
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    config.AddEnvironmentVariables();
+                    config.AddJsonFile("hosting.json", optional: false, reloadOnChange: true);
+                    
+                    var envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+                    if (!string.IsNullOrEmpty(envName))
                     {
-                        config.SetBasePath(Directory.GetCurrentDirectory());
-                        config.AddJsonFile($"secrets/appSettings.{envName}.json", optional: true, reloadOnChange: true);
-                        config.AddCommandLine(args);
-                    })
-                .UseConfiguration(configuration)
-                .UseStartup<Startup>()
-                .Build();
-        }
+                        config.AddJsonFile($"hosting.{envName}.json", optional: false, reloadOnChange: true);
+                    }
+
+                    config.Build();
+                })
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddConsole();
+                })
+                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
     }
 }

@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Authlib.Configuration;
 using Authlib.Services;
-using authService.Exceptions;
-using authService.Settings;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using MongoDB.Driver;
 
 namespace authService.Services
 {
@@ -39,8 +33,6 @@ namespace authService.Services
         {
             try
             {
-                List<Model.MongoDb.User> users = null;
-                
                 var user = await UsersService.GetUserByName(credentials.Username);
 
                 var hashedPwd = PasswordHasher.HashPassword(credentials.Password);

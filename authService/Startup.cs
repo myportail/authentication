@@ -25,13 +25,13 @@ namespace authService
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            AppSettings = Configuration.GetSection("App").Get<Settings.Application>();
+            // AppSettings = Configuration.GetSection("App").Get<Settings.Application>();
 
-            AppSettings.Validate();
+            // AppSettings.Validate();
         }
 
         public IConfiguration Configuration { get; }
-        public Settings.Application AppSettings { get; }
+        // public Settings.Application AppSettings { get; }
         
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -84,7 +84,7 @@ namespace authService
                 c.OperationFilter<SecurityRequirementsOperationFilter>();
                 
             });
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            // services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddControllers();
         }
 
