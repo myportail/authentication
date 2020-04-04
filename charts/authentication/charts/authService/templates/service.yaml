@@ -9,10 +9,14 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 8001
-      name: mariadb
-      targetPort: 8001
+    - port: 80
+      name: authservice-http
+      targetPort: 80
       nodePort: 30101
+    - port: 443
+      name: authservice-https
+      targetPort: 443
+      nodePort: 30102
   selector:
     app: myportail
     service: auth
