@@ -9,9 +9,9 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 443
+    - port: 8001
       name: mariadb
-      targetPort: 443
+      targetPort: 8001
       nodePort: 30101
   selector:
     app: myportail
