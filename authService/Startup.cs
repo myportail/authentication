@@ -129,6 +129,10 @@ namespace authService
                 "authdb", 
                 app.ApplicationServices.GetService<IOptions<Configuration.AuthdbSettings>>().Value, 
                 logger);
+            SettingsLogger.LogSettings(
+                "TokenGeneration",
+                app.ApplicationServices.GetService<IOptions<TokenGenerationSettings>>().Value, 
+                logger);
         }
     }
 }
