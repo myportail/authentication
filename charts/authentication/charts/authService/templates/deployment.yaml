@@ -30,12 +30,12 @@ spec:
               value: authservice
             - name: ASPNETCORE_Kestrel__Certificates__Default__Path
               value: localhost.pfx
-            - name: MYSQL_USER
+            - name: authdb__connection__user
               valueFrom:
                 secretKeyRef:
                   name: authdbsecrets
                   key: authdb.connection.user
-            - name: MYSQL_PASSWORD
+            - name: authdb__connection__password
               valueFrom:
                 secretKeyRef:
                   name: authdbsecrets
