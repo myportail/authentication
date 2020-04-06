@@ -103,7 +103,7 @@ namespace authService
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint($"../{c.RoutePrefix}/v1/swagger.json", "My API V1");
+                    c.SwaggerEndpoint($"/{c.RoutePrefix}/v1/swagger.json", "My API V1");
                 });
 
                 app.UseAuthentication();
