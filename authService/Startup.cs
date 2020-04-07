@@ -106,7 +106,7 @@ namespace authService
                     var swaggerSettings = app.ApplicationServices.GetService<IOptions<Configuration.SwaggerSettings>>()
                         ?.Value;
                     var routePrefix = swaggerSettings?.RoutePrefix ?? "";
-                    c.SwaggerEndpoint($"/swagger/v1/swagger.json", "My API V1");
+                    c.SwaggerEndpoint($"{routePrefix}/swagger/v1/swagger.json", "My API V1");
                     c.RoutePrefix = "/authentication";
                 });
 
