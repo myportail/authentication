@@ -13,7 +13,10 @@ authInit:
 authService:
   namespace: "myportail"
   enabled: true
-  
+  useEndPoint: false
+  endPointIp: 192.168.1.239
+  endPointPort: 8001
+
 ingress:
   namespace: "myportail"
   enabled: true

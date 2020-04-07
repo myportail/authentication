@@ -10,10 +10,36 @@ spec:
   ports:
     - port: 80
       name: authservice-http
+{{ if eq .Values.useEndPoint true }}
+      targetPort: {{ .Values.endPointPort }}
+{{ else }}
       targetPort: 80
+{{ end }}
     - port: 443
       name: authservice-https
       targetPort: 443
+{{ if eq .Values.useEndPoint false }}
   selector:
     app: myportail
     service: auth
+{{ end }}
+
+
+---
+
+{{ if eq .Values.useEndPoint true }}
+
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: authservice
+  namespace: {{ .Values.namespace }}
+subsets:
+  - addresses:
+      - ip: {{ .Values.endPointIp }}
+    ports:
+      - port: {{ .Values.endPointPort }}
+        name: authservice-http
+
+{{ end }}
+
