@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using Authlib.Configuration;
 using Authlib.Diagnostics;
@@ -95,19 +96,31 @@ namespace authService
             {
                 LogSettings(app, logger);
 
+                var swaggerSettings = app.ApplicationServices.GetService<IOptions<Configuration.SwaggerSettings>>()
+                    ?.Value;
+                var routePrefix = swaggerSettings?.RoutePrefix ?? "";
+
                 if (env.IsDevelopment())
                 {
                     app.UseDeveloperExceptionPage();
                 }
 
-                app.UseSwagger();
+                app.UseSwagger(c => { 
+                    c.PreSerializeFilters.Add((swagger, httpReq) =>
+                    {
+                        swagger.Servers = new List<OpenApiServer>
+                        {
+                            new OpenApiServer()
+                            {
+                                Url = $"{httpReq.Scheme}://{httpReq.Host.Value}/{routePrefix}"
+                            }
+                        };
+                    }); 
+                });
+                
                 app.UseSwaggerUI(c =>
                 {
-                    var swaggerSettings = app.ApplicationServices.GetService<IOptions<Configuration.SwaggerSettings>>()
-                        ?.Value;
-                    var routePrefix = swaggerSettings?.RoutePrefix ?? "";
                     c.SwaggerEndpoint($"{routePrefix}/swagger/v1/swagger.json", "My API V1");
-                    c.RoutePrefix = "/authentication";
                 });
 
                 app.UseAuthentication();
