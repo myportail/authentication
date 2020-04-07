@@ -7,7 +7,6 @@ using authService.Contexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +37,7 @@ namespace authService
         {
             services.Configure<Configuration.AuthdbSettings>(Configuration.GetSection("authdb"));
             services.Configure<TokenGenerationSettings>(Configuration.GetSection("TokenGeneration"));
+            services.Configure<Configuration.SwaggerSettings>(Configuration.GetSection("Swagger"));
 
             // services.AddMvc();
             services.AddCors();
@@ -103,7 +103,10 @@ namespace authService
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint($"/{c.RoutePrefix}/v1/swagger.json", "My API V1");
+                    var swaggerSettings = app.ApplicationServices.GetService<IOptions<Configuration.SwaggerSettings>>()
+                        ?.Value;
+                    var routePrefix = swaggerSettings?.RoutePrefix ?? "";
+                    c.SwaggerEndpoint($"{routePrefix}/{c.RoutePrefix}/v1/swagger.json", "My API V1");
                 });
 
                 app.UseAuthentication();
@@ -132,6 +135,10 @@ namespace authService
             SettingsLogger.LogSettings(
                 "TokenGeneration",
                 app.ApplicationServices.GetService<IOptions<TokenGenerationSettings>>().Value, 
+                logger);
+            SettingsLogger.LogSettings(
+                "Swagger",
+                app.ApplicationServices.GetService<IOptions<Configuration.SwaggerSettings>>().Value, 
                 logger);
         }
     }
