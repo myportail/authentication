@@ -26,6 +26,8 @@ spec:
             - containerPort: 80
             - containerPort: 443
           env:
+            - name: Swagger__RoutePrefix
+              value: /authentication
             - name: ASPNETCORE_Kestrel__Certificates__Default__Password
               value: authservice
             - name: ASPNETCORE_Kestrel__Certificates__Default__Path
