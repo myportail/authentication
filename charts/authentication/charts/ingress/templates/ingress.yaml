@@ -5,10 +5,15 @@ metadata:
   namespace: {{ .Values.namespace }}
   annotations:
     kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     nginx.ingress.kubernetes.io/enable-rewrite-log: 'true'
+    nginx.ingress.kubernetes.io/proxy-pass-request-headers: 'true'
     nginx.ingress.kubernetes.io/rewrite-target: /$1
     nginx.ingress.kubernetes.io/service-upstream: 'true'
     nginx.ingress.kubernetes.io/use-regex: 'true'
+    nginx.ingress.kubernetes.io/websocket-services: core-service
+    nginx.org/websocket-services: core-service
 spec:
   rules:
     - host: localhost
@@ -22,4 +27,3 @@ spec:
             backend:
               serviceName: authservice
               servicePort: 80
-  

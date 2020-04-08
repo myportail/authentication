@@ -6,6 +6,7 @@
   <ItemGroup>
     <Folder Include="Contexts\" />
     <Folder Include="Model\" />
+    <Folder Include="UI" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" />
@@ -48,5 +49,17 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\authlib\authlib.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\static\css\main.5f361e03.chunk.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\css\main.5f361e03.chunk.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\js\2.d2679266.chunk.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\js\2.d2679266.chunk.js.LICENSE.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\js\2.d2679266.chunk.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\js\main.14a5dfe5.chunk.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\js\main.14a5dfe5.chunk.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\js\runtime-main.1f74dc99.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\js\runtime-main.1f74dc99.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\media\logo.5d5d9eef.svg" />
   </ItemGroup>
 </Project>
