@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Authlib.Configuration;
 using Authlib.Diagnostics;
@@ -8,9 +9,11 @@ using authService.Contexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -124,9 +127,17 @@ namespace authService
                 });
 
                 app.UseAuthentication();
-                
-                app.UseDefaultFiles();
-                app.UseStaticFiles();
+
+                var options = new DefaultFilesOptions();
+                options.DefaultFileNames.Clear();
+                options.DefaultFileNames.Add("authentication/index.html");
+                app.UseDefaultFiles(options);
+                app.UseStaticFiles(new StaticFileOptions()
+                {
+                    FileProvider = new PhysicalFileProvider(
+                        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+                    RequestPath = new PathString("/authentication")
+                });
 
                 app.UseHsts();
                 app.UseRouting();
