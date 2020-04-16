@@ -20,7 +20,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && npm run cleanroot && npm run movebuildtoroot",
+    "build": "react-scripts build",
+    "devbuild": "npm run build && npm run cleanroot && npm run movebuildtoroot",
     "cleanroot": "shx rm -rf ../../wwwroot",
     "movebuildtoroot": "shx mv build ../../wwwroot",
     "test": "react-scripts test",

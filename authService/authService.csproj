@@ -61,5 +61,24 @@
     <_ContentIncludedByDefault Remove="wwwroot\static\js\runtime-main.1f74dc99.js" />
     <_ContentIncludedByDefault Remove="wwwroot\static\js\runtime-main.1f74dc99.js.map" />
     <_ContentIncludedByDefault Remove="wwwroot\static\media\logo.5d5d9eef.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\asset-manifest.json" />
+    <_ContentIncludedByDefault Remove="wwwroot\favicon.ico" />
+    <_ContentIncludedByDefault Remove="wwwroot\index.html" />
+    <_ContentIncludedByDefault Remove="wwwroot\logo192.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\logo512.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\manifest.json" />
+    <_ContentIncludedByDefault Remove="wwwroot\precache-manifest.e0c3d04ed507f0bc2ab9e46b58470040.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\robots.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\service-worker.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\css\main.523f09c5.chunk.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\css\main.523f09c5.chunk.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\js\2.04aaf387.chunk.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\js\2.04aaf387.chunk.js.LICENSE.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\js\2.04aaf387.chunk.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\js\main.80c7275f.chunk.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\js\main.80c7275f.chunk.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\js\runtime-main.8ab40fd7.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\js\runtime-main.8ab40fd7.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\media\logo.ee7cd8ed.svg" />
   </ItemGroup>
 </Project>
