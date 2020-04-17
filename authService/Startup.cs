@@ -128,15 +128,12 @@ namespace authService
 
                 app.UseAuthentication();
 
-                var options = new DefaultFilesOptions();
-                options.DefaultFileNames.Clear();
-                options.DefaultFileNames.Add("authentication/index.html");
-                app.UseDefaultFiles(options);
+                app.UseDefaultFiles();
                 app.UseStaticFiles(new StaticFileOptions()
                 {
                     FileProvider = new PhysicalFileProvider(
                         Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
-                    RequestPath = new PathString("/authentication")
+                    RequestPath = new PathString("/")
                 });
 
                 app.UseHsts();
