@@ -1,8 +1,8 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {Helmet} from "react-helmet";
 import ConfigService from "./services/configService";
+import Login from "./components/login";
 
 class App extends React.Component {
   public constructor(props: {}) {
@@ -26,6 +26,7 @@ class App extends React.Component {
               Learn React
             </a>
           </header>
+            <Login></Login>
         </div>
     );
   }
