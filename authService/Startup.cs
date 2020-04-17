@@ -42,6 +42,7 @@ namespace authService
             services.Configure<Configuration.AuthdbSettings>(Configuration.GetSection("authdb"));
             services.Configure<TokenGenerationSettings>(Configuration.GetSection("TokenGeneration"));
             services.Configure<Configuration.SwaggerSettings>(Configuration.GetSection("Swagger"));
+            services.Configure<Configuration.StaticFilesSettings>(Configuration.GetSection("StaticFiles"));
 
             // services.AddMvc();
             services.AddCors();
@@ -128,12 +129,15 @@ namespace authService
 
                 app.UseAuthentication();
 
+                var staticFilesSettings =
+                    app.ApplicationServices.GetService <IOptions<Configuration.StaticFilesSettings>>().Value;
+                
                 app.UseDefaultFiles();
                 app.UseStaticFiles(new StaticFileOptions()
                 {
                     FileProvider = new PhysicalFileProvider(
                         Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
-                    RequestPath = new PathString("")
+                    RequestPath = new PathString(staticFilesSettings.RequestPath ?? "")
                 });
 
                 app.UseHsts();
@@ -161,6 +165,10 @@ namespace authService
             SettingsLogger.LogSettings(
                 "Swagger",
                 app.ApplicationServices.GetService<IOptions<Configuration.SwaggerSettings>>().Value, 
+                logger);
+            SettingsLogger.LogSettings(
+                "StaticFiles",
+                app.ApplicationServices.GetService<IOptions<Configuration.StaticFilesSettings>>().Value, 
                 logger);
         }
     }
