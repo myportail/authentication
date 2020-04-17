@@ -131,6 +131,12 @@ namespace authService
 
                 var staticFilesSettings =
                     app.ApplicationServices.GetService <IOptions<Configuration.StaticFilesSettings>>().Value;
+
+                var wwwrootFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+                if (!Directory.Exists(wwwrootFolder))
+                {
+                    Directory.CreateDirectory(wwwrootFolder);
+                }
                 
                 app.UseDefaultFiles();
                 app.UseStaticFiles(new StaticFileOptions()
