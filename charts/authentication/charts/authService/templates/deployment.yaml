@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: myportail/auth-service
+          image: myportail/auth-service:{{.Values.version}}
           workingDir: /authService
           command: ["dotnet", "authService.dll"]
           resources:

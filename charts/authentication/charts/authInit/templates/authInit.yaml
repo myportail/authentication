@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: authenticationinit
-          image: myportail/authentication-init:latest
+          image: myportail/authentication-init:{{.Values.version}}
           workingDir: /authInit
           command: ["dotnet", "authInit.dll"]
           env:

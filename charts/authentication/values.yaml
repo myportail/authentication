@@ -9,6 +9,7 @@ authdb:
 authInit:
   namespace: "myportail"
   enabled: true
+  version: 1.0.5
   
 authService:
   namespace: "myportail"
@@ -16,6 +17,7 @@ authService:
   useEndPoint: false
   endPointIp: 192.168.1.239
   endPointPort: 8001
+  version: 1.0.5
 
 ingress:
   namespace: "myportail"
