@@ -133,7 +133,7 @@ namespace authService
                 {
                     FileProvider = new PhysicalFileProvider(
                         Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
-                    RequestPath = new PathString("/")
+                    RequestPath = new PathString("")
                 });
 
                 app.UseHsts();
