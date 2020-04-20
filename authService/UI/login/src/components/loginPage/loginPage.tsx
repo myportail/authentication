@@ -7,7 +7,9 @@ class LoginPage extends React.Component {
         return (
             <div className="login-page">
                 <div className="login-controls">
-                    <Login></Login>
+                    <div className="login-controls-row">
+                        <Login></Login>
+                    </div>
                 </div>
             </div>
         );

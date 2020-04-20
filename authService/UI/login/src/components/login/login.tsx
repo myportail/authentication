@@ -1,4 +1,5 @@
 import React from "react";
+import './login.scss';
 
 class Login extends React.Component {
     onSubmit = (e: any) => {
@@ -11,11 +12,18 @@ class Login extends React.Component {
         return (
             <div>
                 <form onSubmit={this.onSubmit} className="login-form">
-                    <label htmlFor="username">username: </label>
-                    <input id="username"/>
-                    <label htmlFor="password">password: </label>
-                    <input id="password" type="password"/>
-                    <input type="submit" value="login" />
+                    <div className="controls-line">
+                        <label htmlFor="username">username: </label>
+                        <input id="username"/>
+                    </div>
+                    <div className="controls-line">
+                        <label htmlFor="password">password: </label>
+                        <input id="password" type="password"/>
+                    </div>
+                    <div className="controls-line">
+                        <div></div>
+                        <input type="submit" value="login" />
+                    </div>
                 </form>
             </div>
         );
