@@ -27,3 +27,14 @@ spec:
             backend:
               serviceName: authservice
               servicePort: 80
+    - host: myportail.danny-thibaudeau.ca
+      http:
+        paths:
+          - path: /authentication/(.*)
+            backend:
+              serviceName: authservice
+              servicePort: 80
+          - path: /authentication
+            backend:
+              serviceName: authservice
+              servicePort: 80
