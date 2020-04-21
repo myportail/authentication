@@ -4,17 +4,19 @@ import './index.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Helmet } from "react-helmet";
+import configureStore from "./store/configureStore";
+import { Provider } from 'react-redux';
+
+const store = configureStore();
+
+const jsx = (
+  <Provider store={store}>
+      <App />
+  </Provider>  
+);
 
 ReactDOM.render(
-    <>
-    <Helmet>
-        <meta name="test"/>
-        <base href="/authentication" />
-    </Helmet>
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-    </>,
+    jsx,
   document.getElementById('root')
 );
 

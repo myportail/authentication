@@ -1,17 +1,23 @@
 import React from 'react';
 import './App.scss';
-import ConfigService from "./services/configService";
+import ConfigService, {IConfigService} from "./services/configService";
 import LoginPage from "./components/loginPage/loginPage";
+import {connect} from "react-redux";
+import MainPage from "./components/mainPage/mainPage";
 
-class App extends React.Component {
-  public constructor(props: {}) {
+interface AppProps {
+    isAuthenticated: boolean;
+}
+
+class App extends React.Component<AppProps> {
+  public constructor(props: AppProps) {
     super(props);
   }
   
   public render() {
-    return (
+      return (
         <div className="App">
-            <LoginPage></LoginPage>
+            { this.props.isAuthenticated ? <MainPage/> : <LoginPage/>  }
         </div>
     );
   }
@@ -25,4 +31,11 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state: any) => {
+    return {
+        isAuthenticated: !!state.authentication.token,
+        authentication: state.authentication
+    }
+};
+
+export default connect(mapStateToProps)(App);

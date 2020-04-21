@@ -1,6 +1,7 @@
 ﻿import React from "react";
 import Login from "../login/login";
 import "./loginPage.scss"
+import {connect} from "react-redux";
 
 class LoginPage extends React.Component {
     public render() {
@@ -16,4 +17,5 @@ class LoginPage extends React.Component {
     }
 }
 
-export default LoginPage;
+
+export default connect()(LoginPage);
