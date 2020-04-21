@@ -10,25 +10,26 @@ interface AppProps {
 }
 
 class App extends React.Component<AppProps> {
-  public constructor(props: AppProps) {
-    super(props);
-  }
-  
-  public render() {
-      return (
-        <div className="App">
-            { this.props.isAuthenticated ? <MainPage/> : <LoginPage/>  }
-        </div>
-    );
-  }
-  
-  public componentDidMount(): void {
-    var service = ConfigService.instance;
-    service.load()
-        .then((config) => {
-          console.log('config loaded');
-        });
-  }
+    public constructor(props: AppProps) {
+        super(props);
+    }
+
+    public render() {
+        return (
+            <div className="App">
+                {this.props.isAuthenticated ? <MainPage/> : <LoginPage/>}
+            </div>
+        );
+    }
+
+    public componentDidMount(): void {
+        console.log(process.env);
+        var service = ConfigService.instance;
+        service.load()
+            .then((config) => {
+                console.log('config loaded');
+            });
+    }
 }
 
 const mapStateToProps = (state: any) => {
