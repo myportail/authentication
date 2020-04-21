@@ -25,7 +25,7 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "start": "env-cmd -f .env.development react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "devbuild": "npm run build && npm run cleanroot && npm run movebuildtoroot",
     "cleanroot": "shx rm -rf ../../wwwroot",

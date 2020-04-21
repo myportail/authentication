@@ -1,6 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
-import AuthenticationActions from "../../actions/authentication";
+import AuthenticationActions from "../../actions/authenticationActions";
 
 interface MainPageProps {
     dispatch(args: any): any;

@@ -1,4 +1,4 @@
-import AuthenticationActions from "../actions/authentication";
+import AuthenticationActions from "../actions/authenticationActions";
 
 const authenticationDefaultState = {
     token: undefined,

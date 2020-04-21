@@ -1,6 +1,6 @@
 import React from "react";
 import './login.scss';
-import AuthenticationActions from "../../actions/authentication";
+import AuthenticationActions from "../../actions/authenticationActions";
 import {connect} from "react-redux";
 
 interface LoginProps {

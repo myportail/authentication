@@ -8,6 +8,7 @@
     <Folder Include="Model\" />
     <Folder Include="UI" />
     <Folder Include="UI\login\src\configuration" />
+    <Folder Include="UI\login\src\decorators" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" />
