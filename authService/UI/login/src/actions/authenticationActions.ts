@@ -1,7 +1,9 @@
 import {ActionsBase} from './actionsBase';
 
 interface AuthenticationActionsIds {
-    login: string;
+    loginStarted: string;
+    loginSuccess: string;
+    loginFailure: string;
     logout: string;
 }
 
@@ -9,16 +11,41 @@ class AuthenticationActions extends ActionsBase<AuthenticationActionsIds> {
 
     constructor() {
         super([
-            'login',
+            'loginStarted',
+            'loginSuccess',
+            'loginFailure',
             'logout'
         ]);
     }
     
     public login = (username: string, password: string) => {
+        return (dispatch: any) => {
+            dispatch(this.loginStarted());
+            
+            setTimeout(() => {
+                dispatch(this.loginSuccess('some token value', 'some username'));
+            }, 5000);
+        };
+    }
+    
+    public loginStarted = () => {
         return {
-            type: this.ids.login,
-            username,
-            password
+            type: this.ids.loginStarted
+        };
+    }
+    
+    public loginSuccess = (token: string, username: string) => {
+        return {
+            type: this.ids.loginSuccess,
+            token,
+            username
+        };
+    }
+    
+    public loginFailure = (error: string) => {
+        return {
+            type: this.ids.loginFailure,
+            error
         };
     }
     

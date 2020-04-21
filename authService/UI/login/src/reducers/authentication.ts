@@ -8,14 +8,28 @@ const authenticationDefaultState = {
 var reducer = (state = authenticationDefaultState, action: any) => {
     
     switch (action.type) {
-        case AuthenticationActions.ids.login: {
+        case AuthenticationActions.ids.loginSuccess: {
             return {
                 ...state,
-                token: 'some value',
-                username: 'user name'
+                token: action.token,
+                username: action.username,
+                loginInProgress: false,
+                loginError: undefined
             };
         }
-        break;
+        case AuthenticationActions.ids.loginStarted: {
+            return {
+                ...state,
+                loginInProgress: true
+            }
+        }
+        case AuthenticationActions.ids.loginFailure: {
+            return {
+                ...state,
+                loginInProgress: false,
+                loginError: 'failure to login'
+            }
+        }
         case AuthenticationActions.ids.logout: {
             return {
                 ...state,
@@ -23,7 +37,6 @@ var reducer = (state = authenticationDefaultState, action: any) => {
                 username: undefined
             };
         }
-        break;
     }
     
     return state;
