@@ -2,9 +2,11 @@ import React from "react";
 import './login.scss';
 import AuthenticationActions from "../../actions/authenticationActions";
 import {connect} from "react-redux";
+import WaitingOverlay from "../waitingOverlay/waitingOverlay";
 
 interface LoginProps {
     dispatch(args: any): any;
+    authentication: any;
 }
 
 class Login extends React.Component<LoginProps> {
@@ -31,9 +33,18 @@ class Login extends React.Component<LoginProps> {
             this.state.password
         ));
     };
+    loginInProgressOverlay = () => {
+        if (this.props.authentication.loginInProgress) {
+            return (
+                <div className="waiting-overlay">
+                    <WaitingOverlay/>
+                </div>
+            )
+        }
+    }
     public render() {
         return (
-            <div>
+            <div className="login-component">
                 <form onSubmit={this.onSubmit} className="login-form">
                     <div className="controls-line">
                         <label htmlFor="username">username: </label>
@@ -48,6 +59,8 @@ class Login extends React.Component<LoginProps> {
                         <input type="submit" value="login" />
                     </div>
                 </form>
+                { this.loginInProgressOverlay() }
+                
             </div>
         );
     }

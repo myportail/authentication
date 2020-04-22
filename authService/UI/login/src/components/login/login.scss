@@ -1,14 +1,28 @@
-﻿.login-form {
-  display: block;
+﻿.login-component {
   
-  .controls-line {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-    
-    label {
-      padding-right: 1rem;
+  .login-form {
+    padding: 1rem;
+    display: block;
+
+    .controls-line {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+
+      label {
+        padding-right: 1rem;
+      }
     }
+  }
+
+  .waiting-overlay {
+    display: block;
+    position: relative;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0.8, 0.8, 0.8, 0.2);
   }
 }
