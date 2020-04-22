@@ -1,0 +1,11 @@
+.user-info-component {
+  position: absolute;
+  display: block;
+  right: 1rem;
+  bottom: 1rem;
+  
+  .username {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+}

@@ -1,6 +1,14 @@
+@import './styles/variables';
+
+
 .App {
   text-align: center;
   height: 100vh;
+  
+  .content-area {
+    height: $content-area-height;
+    overflow: hidden;
+  }
 }
 
 .App-logo {

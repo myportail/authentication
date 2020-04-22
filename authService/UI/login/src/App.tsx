@@ -4,6 +4,7 @@ import ConfigService, {IConfigService} from "./services/configService";
 import LoginPage from "./components/loginPage/loginPage";
 import {connect} from "react-redux";
 import MainPage from "./components/mainPage/mainPage";
+import Header from "./components/header/header";
 
 interface AppProps {
     isAuthenticated: boolean;
@@ -17,7 +18,10 @@ class App extends React.Component<AppProps> {
     public render() {
         return (
             <div className="App">
-                {this.props.isAuthenticated ? <MainPage/> : <LoginPage/>}
+                <Header />
+                <div className="content-area">
+                    {this.props.isAuthenticated ? <MainPage/> : <LoginPage/>}
+                </div>
             </div>
         );
     }
