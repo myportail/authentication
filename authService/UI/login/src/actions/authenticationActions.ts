@@ -1,61 +1,43 @@
-import {ActionsBase} from './actionsBase';
+import { AuthenticationActionsIds } from './authenticationActionsIds'
 
-interface AuthenticationActionsIds {
-    loginStarted: string;
-    loginSuccess: string;
-    loginFailure: string;
-    logout: string;
-}
-
-class AuthenticationActions extends ActionsBase<AuthenticationActionsIds> {
-
-    constructor() {
-        super([
-            'loginStarted',
-            'loginSuccess',
-            'loginFailure',
-            'logout'
-        ]);
-    }
+class AuthenticationActions {
     
-    public login = (username: string, password: string) => {
+    public static login = (username: string, password: string) => {
         return (dispatch: any) => {
-            dispatch(this.loginStarted());
+            dispatch(AuthenticationActions.loginStarted());
             
             setTimeout(() => {
-                dispatch(this.loginSuccess('some token value', 'some username'));
+                dispatch(AuthenticationActions.loginSuccess('some token value', 'some username'));
             }, 5000);
         };
     }
     
-    public loginStarted = () => {
+    public static loginStarted = () => {
         return {
-            type: this.ids.loginStarted
+            type: AuthenticationActionsIds.loginStarted
         };
     }
     
-    public loginSuccess = (token: string, username: string) => {
+    public static loginSuccess = (token: string, username: string) => {
         return {
-            type: this.ids.loginSuccess,
+            type: AuthenticationActionsIds.loginSuccess,
             token,
             username
         };
     }
     
-    public loginFailure = (error: string) => {
+    public static loginFailure = (error: string) => {
         return {
-            type: this.ids.loginFailure,
+            type: AuthenticationActionsIds.loginFailure,
             error
         };
     }
     
-    public logout = () => {
+    public static logout = () => {
         return {
-            type: this.ids.logout
+            type: AuthenticationActionsIds.logout
         };
     }
 }
 
-const authenticationActionsInstance = new AuthenticationActions();
-
-export default authenticationActionsInstance;
+export default AuthenticationActions;

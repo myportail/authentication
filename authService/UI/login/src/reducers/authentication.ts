@@ -1,4 +1,4 @@
-import AuthenticationActions from "../actions/authenticationActions";
+import {AuthenticationActionsIds} from "../actions/authenticationActionsIds";
 
 const authenticationDefaultState = {
     token: undefined,
@@ -6,9 +6,8 @@ const authenticationDefaultState = {
 };
 
 var reducer = (state = authenticationDefaultState, action: any) => {
-    
     switch (action.type) {
-        case AuthenticationActions.ids.loginSuccess: {
+        case AuthenticationActionsIds.loginSuccess: {
             return {
                 ...state,
                 token: action.token,
@@ -17,20 +16,20 @@ var reducer = (state = authenticationDefaultState, action: any) => {
                 loginError: undefined
             };
         }
-        case AuthenticationActions.ids.loginStarted: {
+        case AuthenticationActionsIds.loginStarted: {
             return {
                 ...state,
                 loginInProgress: true
             }
         }
-        case AuthenticationActions.ids.loginFailure: {
+        case AuthenticationActionsIds.loginFailure: {
             return {
                 ...state,
                 loginInProgress: false,
                 loginError: 'failure to login'
             }
         }
-        case AuthenticationActions.ids.logout: {
+        case AuthenticationActionsIds.logout: {
             return {
                 ...state,
                 token: undefined,
