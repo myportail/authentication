@@ -1,4 +1,6 @@
 ﻿.login-component {
+  display: block;
+  position: relative;
   
   .login-form {
     padding: 1rem;
@@ -18,11 +20,11 @@
 
   .waiting-overlay {
     display: block;
-    position: relative;
-    top: -100%;
+    position: absolute;
+    top: 0%;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0.8, 0.8, 0.8, 0.2);
   }
+
 }

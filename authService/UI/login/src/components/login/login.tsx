@@ -59,8 +59,8 @@ class Login extends React.Component<LoginProps> {
                         <input type="submit" value="login" />
                     </div>
                 </form>
+
                 { this.loginInProgressOverlay() }
-                
             </div>
         );
     }
