@@ -7,10 +7,10 @@
     <Folder Include="Contexts\" />
     <Folder Include="Model\" />
     <Folder Include="UI" />
-    <Folder Include="UI\login\src\configuration" />
-    <Folder Include="UI\login\src\contexts" />
-    <Folder Include="UI\login\src\decorators" />
-    <Folder Include="UI\login\src\services\Mocks" />
+    <Folder Include="UI\login-react\src\configuration" />
+    <Folder Include="UI\login-react\src\contexts" />
+    <Folder Include="UI\login-react\src\decorators" />
+    <Folder Include="UI\login-react\src\services\Mocks" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" />
