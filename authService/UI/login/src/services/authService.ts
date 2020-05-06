@@ -1,10 +1,20 @@
-class AuthService {
+interface IAuthService {
+    
+    login(username: string, password: string): Promise<any>;
+    logout(): Promise<any>;
+}
+
+class AuthService implements IAuthService {
 
     public async login(username: string, password: string): Promise<any> {
-        return {
-            token: 'some token value',
-            username
-        };
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    token: 'some token value',
+                    username
+                });
+            }, 3000)
+        });
     }
     
     public async logout(): Promise<any> {
@@ -15,4 +25,6 @@ class AuthService {
     }
 }
 
-export default AuthService;
+let authService: IAuthService = new AuthService();
+
+export default authService;

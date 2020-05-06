@@ -1,11 +1,18 @@
 import {AuthenticationActionsIds} from "../actions/authenticationActionsIds";
 
-const authenticationDefaultState = {
+export interface AuthenticationState {
+    token: string | undefined;
+    username: string | undefined;
+    loginInProgress: boolean;
+}
+
+export const authenticationDefaultState : AuthenticationState = {
     token: undefined,
-    username: undefined
+    username: undefined,
+    loginInProgress: false
 };
 
-var reducer = (state = authenticationDefaultState, action: any) => {
+var authenticationReducer = (state: AuthenticationState = authenticationDefaultState, action: any) => {
     switch (action.type) {
         case AuthenticationActionsIds.loginSuccess: {
             return {
@@ -42,4 +49,4 @@ var reducer = (state = authenticationDefaultState, action: any) => {
 }
 
 
-export default reducer;
+export default authenticationReducer;
