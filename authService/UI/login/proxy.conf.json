@@ -1,0 +1,11 @@
+{
+  "/api/*": {
+    "target": "http://myportail.danny-thibaudeau.ca/authentication/api",
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "secure": false,
+    "pathRewrite": {
+      "^/api": ""
+    }
+  }
+}
