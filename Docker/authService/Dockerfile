@@ -6,8 +6,11 @@ WORKDIR /src/authService
 RUN dotnet restore -nowarn:msb3202,nu1503
 RUN dotnet build -c Debug -o /app
 
-FROM alpine:3.8 as uibuild
-RUN apk add --update nodejs nodejs-npm
+FROM ubuntu:20.04 as uibuild
+RUN apt-get update
+RUN apt-get install curl -y
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
+RUN apt-get install -y nodejs
 WORKDIR /src
 COPY ./authService/UI/login .
 RUN npm install
