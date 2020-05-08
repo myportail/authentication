@@ -7,13 +7,13 @@ import { LoginPageComponent } from './components/login-page/login-page.component
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {APP_BASE_HREF, PlatformLocation} from "@angular/common";
-import { BuildNumberComponent } from './components/build-number/build-number.component';
+import { VersionNumberComponent } from './components/version-number/version-number.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginPageComponent,
-    BuildNumberComponent
+    VersionNumberComponent
   ],
   imports: [
     BrowserModule,

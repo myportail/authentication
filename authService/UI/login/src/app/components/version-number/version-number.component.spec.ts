@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BuildNumberComponent } from './build-number.component';
+import { VersionNumberComponent } from './version-number.component';
 
-describe('BuildNumberComponent', () => {
-  let component: BuildNumberComponent;
-  let fixture: ComponentFixture<BuildNumberComponent>;
+describe('VersionNumberComponent', () => {
+  let component: VersionNumberComponent;
+  let fixture: ComponentFixture<VersionNumberComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BuildNumberComponent ]
+      declarations: [ VersionNumberComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BuildNumberComponent);
+    fixture = TestBed.createComponent(VersionNumberComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
