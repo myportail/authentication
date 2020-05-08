@@ -18,7 +18,7 @@ RUN dotnet publish -c Release -o /app
 COPY ./authService/localhost.conf /app/localhost.conf
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 as final
-COPY --from=uibuild /src/build /authService/wwwroot
+COPY --from=uibuild /src/dist/login /authService/wwwroot
 COPY --from=publish /app /authService
 
 RUN openssl req -new -x509 -nodes -days 365 -newkey rsa:2048 -keyout /authService/localhost.key -out /authService/localhost.crt -config /authService/localhost.conf -subj '/CN=www.mydom.com/O=My Company Name LTD./C=US'
