@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {ApiHttpClientService} from "./api-http-client.service";
 
 @Injectable({
   providedIn: 'root'
@@ -8,12 +7,11 @@ import {ApiHttpClientService} from "./api-http-client.service";
 export class AuthenticationService {
 
   constructor(
-    private httpClientService: ApiHttpClientService,
     private httpClient: HttpClient
   ) { }
 
   login(username: string, password: string) {
-    this.httpClientService.get('/api/values', {})
+    this.httpClient.get('api/values', {})
       .subscribe(
         (data) => {
         console.log(data);

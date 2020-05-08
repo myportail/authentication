@@ -1,4 +1,6 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 as build
+ARG build_no
+RUN echo "build_no = ${build_no}"
 WORKDIR /src
 COPY ./authlib ./authlib
 COPY ./authService ./authService
@@ -7,12 +9,15 @@ RUN dotnet restore -nowarn:msb3202,nu1503
 RUN dotnet build -c Debug -o /app
 
 FROM ubuntu:20.04 as uibuild
+ARG build_no
+RUN echo "build_no = ${build_no}"
 RUN apt-get update
 RUN apt-get install curl -y
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get install -y nodejs
 WORKDIR /src
 COPY ./authService/UI/login .
+RUN echo "${build_no}" > ./src/assets/build_no.txt 
 RUN npm install
 RUN npm run build
 

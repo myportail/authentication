@@ -17,7 +17,7 @@ authService:
   useEndPoint: false
   endPointIp: 192.168.1.239
   endPointPort: 8001
-  version: 1.0.9
+  version: 1.0.10
 
 ingress:
   namespace: "myportail"
