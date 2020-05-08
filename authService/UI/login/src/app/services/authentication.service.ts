@@ -8,12 +8,12 @@ import {ApiHttpClientService} from "./api-http-client.service";
 export class AuthenticationService {
 
   constructor(
-    private httpClient: ApiHttpClientService
+    private httpClientService: ApiHttpClientService,
+    private httpClient: HttpClient
   ) { }
 
   login(username: string, password: string) {
-    let options = {};
-    this.httpClient.get('/api/values', options)
+    this.httpClientService.get('/api/values', {})
       .subscribe(
         (data) => {
         console.log(data);
