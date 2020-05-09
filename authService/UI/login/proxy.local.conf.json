@@ -1,0 +1,11 @@
+{
+  "/authentication/api": {
+    "target": "http://localhost:8001/api",
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "secure": false,
+    "pathRewrite": {
+      "^/authentication/api": ""
+    }
+  }
+}

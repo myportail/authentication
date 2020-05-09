@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --base-href /authentication/ --proxy-config proxy.dev.conf.json",
+    "start-local": "ng serve --base-href /authentication/ --proxy-config proxy.local.conf.json",
     "build": "ng build --prod --base-href /authentication/",
     "test": "ng test",
     "lint": "ng lint",
