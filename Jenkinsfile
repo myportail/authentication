@@ -22,7 +22,7 @@ pipeline {
         stage('build authentication-service') {
             steps {
                 script {
-                    authServiceImage = docker.build("myportail/auth-service:1.0.${env.BUILD_ID}", "--build-arg build_no=${env.BUILD_ID} -f ./Docker/authService/Dockerfile .")
+                    authServiceImage = docker.build("myportail/auth-service:1.0.${env.BUILD_ID}", "--build-arg version=1.0.${env.BUILD_ID} -f ./Docker/authService/Dockerfile .")
                 }
             }
         }

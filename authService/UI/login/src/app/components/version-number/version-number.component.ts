@@ -9,7 +9,6 @@ import {HttpClient} from "@angular/common/http";
 export class VersionNumberComponent implements OnInit {
 
   version: string;
-  buildNumber: string;
 
   constructor(
     private httpClient: HttpClient
@@ -21,13 +20,6 @@ export class VersionNumberComponent implements OnInit {
     })
       .subscribe((data) => {
         this.version = data.toString().trim();
-      });
-
-    this.httpClient.get('assets/build_no.txt', {
-      responseType: 'text'
-    })
-      .subscribe((data) => {
-        this.buildNumber = data.toString().trim();
       });
   }
 
