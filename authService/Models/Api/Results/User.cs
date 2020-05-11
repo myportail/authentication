@@ -1,4 +1,4 @@
-﻿namespace authService.Models.Api
+﻿namespace authService.Models.Api.Results
 {
     public class User
     {

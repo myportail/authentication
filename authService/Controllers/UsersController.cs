@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using authService.Models.Api;
+using authService.Models.Api.Parameters;
+using authService.Models.Api.Results;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

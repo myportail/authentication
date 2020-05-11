@@ -2,7 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using Authlib.Services;
-using authService.Models.Api;
+using authService.Models.Api.Parameters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace authService.Controllers

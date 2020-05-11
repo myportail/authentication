@@ -1,4 +1,6 @@
 using authService.Models.Api;
+using authService.Models.Api.Parameters;
+using authService.Models.Api.Results;
 using AutoMapper;
 
 namespace authService.AutoMapper
