@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using authService.Models.Api;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -25,14 +26,14 @@ namespace authService.Controllers
         [Route("create")]
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreateUser([FromBody] Model.Api.CreateUser createUser)
+        public async Task<IActionResult> CreateUser([FromBody] CreateUser createUser)
         {
             try
             {
                 // test line to query claim data
                 var userId = HttpContext.User.Claims.First(x => x.Type == "id")?.Value;
 
-                var user = AutoMapper.Map<Model.Business.User>(createUser);
+                var user = AutoMapper.Map<Models.Business.User>(createUser);
                 
                 var dbUser = await UsersService.AddUser(user);
             }
@@ -52,7 +53,7 @@ namespace authService.Controllers
             try
             {
                 var users = await UsersService.listUsers();
-                var retUsers = users.Select(x => AutoMapper.Map<Model.Api.User>(x));
+                var retUsers = users.Select(x => AutoMapper.Map<User>(x));
                 return Ok(retUsers);
             }
             catch (Exception ex)

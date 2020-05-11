@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Authlib.Services;
 using authService.Contexts;
-using authService.Model.Api;
+using authService.Models.Business;
 using AutoMapper;
 
 namespace authService.Services
@@ -26,7 +26,7 @@ namespace authService.Services
             AutoMapper = autoMapper;
         }
 
-        public async Task<Model.Business.User> AddUser(Model.Business.User user)
+        public async Task<User> AddUser(User user)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace authService.Services
                 await UserContext.Users.AddAsync(dbUser);
                 await UserContext.SaveChangesAsync();
 
-                var addedUser = AutoMapper.Map<Model.Business.User>(dbUser);
+                var addedUser = AutoMapper.Map<User>(dbUser);
                 
                 return addedUser;
             }
@@ -55,14 +55,14 @@ namespace authService.Services
             }
         }
 
-        public async Task<Model.Business.User> GetUserByName(string name)
+        public async Task<User> GetUserByName(string name)
         {
             try
             {
                 var res = UserContext.Users.Where(x => x.Name.Equals(name));
                 if (res.Any())
                 {
-                    return AutoMapper.Map<Model.Business.User>(res.First());
+                    return AutoMapper.Map<User>(res.First());
                 }
 
                 return null;
@@ -74,14 +74,14 @@ namespace authService.Services
             }
         }
 
-        public async Task<List<Model.Business.User>> listUsers()
+        public async Task<List<User>> listUsers()
         {
             try
             {
                 var dbUsers = UserContext.Users.AsEnumerable();
 
                 var usersList = dbUsers
-                    .Select(x => AutoMapper.Map<Model.Business.User>(x))
+                    .Select(x => AutoMapper.Map<User>(x))
                     .ToList();
                 
                 return usersList;

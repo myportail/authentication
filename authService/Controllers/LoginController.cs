@@ -2,6 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using Authlib.Services;
+using authService.Models.Api;
 using Microsoft.AspNetCore.Mvc;
 
 namespace authService.Controllers
@@ -21,7 +22,7 @@ namespace authService.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] Model.Api.LoginCredentials credentials)
+        public async Task<IActionResult> Login([FromBody] LoginCredentials credentials)
         {
             try
             {

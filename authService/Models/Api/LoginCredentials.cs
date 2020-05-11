@@ -1,4 +1,4 @@
-﻿namespace authService.Model.Api
+﻿namespace authService.Models.Api
 {
     public class LoginCredentials
     {

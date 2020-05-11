@@ -1,4 +1,4 @@
-namespace authService.Model.Business
+namespace authService.Models.Business
 {
     public class User
     {

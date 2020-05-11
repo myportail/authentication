@@ -1,4 +1,4 @@
-namespace authService.Model
+namespace authService.Models
 {
     public class ServiceAddress
     {

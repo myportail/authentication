@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Authlib.Configuration;
 using Authlib.Services;
+using authService.Models.Api;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -29,7 +30,7 @@ namespace authService.Services
             UsersService = usersService;
         }
 
-        public async Task<JwtSecurityToken> CreateToken(Model.Api.LoginCredentials credentials)
+        public async Task<JwtSecurityToken> CreateToken(LoginCredentials credentials)
         {
             try
             {

@@ -5,7 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Contexts\" />
-    <Folder Include="Model\" />
+    <Folder Include="Models\" />
     <Folder Include="UI" />
     <Folder Include="UI\login-react\src\configuration" />
     <Folder Include="UI\login-react\src\contexts" />

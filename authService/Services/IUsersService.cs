@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Authlib.Models.Db;
+using User = authService.Models.Business.User;
 
 namespace authService.Services
 {
     public interface IUsersService
     {
-        Task<Model.Business.User> AddUser(Model.Business.User user);
-        Task<List<Model.Business.User>> listUsers();
-        Task<Model.Business.User> GetUserByName(string name);
+        Task<User> AddUser(User user);
+        Task<List<User>> listUsers();
+        Task<User> GetUserByName(string name);
     }
 }

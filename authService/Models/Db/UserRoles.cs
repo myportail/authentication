@@ -1,4 +1,4 @@
-namespace authService.Model.Db
+namespace authService.Models.Db
 {
     public sealed class UserRole
     {
