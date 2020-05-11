@@ -74,7 +74,7 @@ namespace authInit.Services
             if (existingAdminUser == null && !String.IsNullOrEmpty(DefaultUserSettings.Username) && !String.IsNullOrEmpty(DefaultUserSettings.Password))
             {
                 var user = new User();
-                user.Id = new Guid().ToString();
+                user.Id = Guid.NewGuid().ToString();
                 user.Name = DefaultUserSettings.Username;
                 user.Password = PasswordHasher.HashPassword(DefaultUserSettings.Password);
                 await userContext.Users.AddAsync(user);
