@@ -1,4 +1,4 @@
-using AuthLib.Db.Models;
+using Authlib.Models.Db;
 using Microsoft.EntityFrameworkCore;
 
 namespace authService.Contexts

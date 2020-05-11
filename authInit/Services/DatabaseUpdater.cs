@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using authInit.Contexts;
 using Authlib.Configuration;
-using AuthLib.Db.Models;
+using Authlib.Models.Db;
 using Authlib.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AuthLib.Db.Models
+namespace Authlib.Models.Db
 {
     public class User
     {
