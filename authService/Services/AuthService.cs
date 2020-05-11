@@ -31,13 +31,15 @@ namespace authService.Services
             UsersService = usersService;
         }
 
-        public async Task<JwtSecurityToken> CreateToken(LoginCredentials credentials)
+        public async Task<JwtSecurityToken> CreateToken(string username, string password)
         {
             try
             {
-                var user = await UsersService.GetUserByName(credentials.Username);
+                var user = await UsersService.GetUserByName(username);
+                if (user == null)
+                    return null;
 
-                var hashedPwd = PasswordHasher.HashPassword(credentials.Password);
+                var hashedPwd = PasswordHasher.HashPassword(password);
                 if (!user.Password.Equals(hashedPwd))
                     throw new Exception("invalid credentials");
                 

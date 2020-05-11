@@ -27,7 +27,6 @@ namespace authService.Controllers
 
         [Route("create")]
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> CreateUser([FromBody] CreateUser createUser)
         {
             try
@@ -49,7 +48,6 @@ namespace authService.Controllers
 
         [Route("")]
         [HttpGet]
-        // [Authorize]
         public async Task<IActionResult> ListUsers()
         {
             try

@@ -57,7 +57,11 @@ namespace authService
             services.AddScoped<Services.IUsersService, Services.UsersService>();
             services.AddScoped<Services.IAuthService, Services.AuthService>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
                 .AddJwtBearer(options =>
                 {
                     var tokenGeneration = Configuration.GetSection("TokenGeneration").Get<TokenGenerationSettings>();
@@ -81,12 +85,27 @@ namespace authService
                     Version = "v1"
                 });
                 // c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
-                c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
                     Name = "Authorization",
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                    { 
+                        new OpenApiSecurityScheme 
+                        { 
+                            Reference = new OpenApiReference 
+                            { 
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer" 
+                            } 
+                        },
+                        new string[] { } 
+                    } 
                 });
                 c.OperationFilter<SecurityRequirementsOperationFilter>();
                 
@@ -128,9 +147,7 @@ namespace authService
                 {
                     c.SwaggerEndpoint($"{routePrefix}/swagger/v1/swagger.json", "My API V1");
                 });
-
-                app.UseAuthentication();
-
+                
                 var staticFilesSettings =
                     app.ApplicationServices.GetService <IOptions<Configuration.StaticFilesSettings>>().Value;
 
@@ -150,6 +167,7 @@ namespace authService
 
                 app.UseHsts();
                 app.UseRouting();
+                app.UseAuthentication();
                 app.UseAuthorization();
                 app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
             }

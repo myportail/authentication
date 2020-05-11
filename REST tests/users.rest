@@ -1,0 +1,9 @@
+@server = http://localhost:8001
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ2MGI4NjZkLWMyNjctNDYxYi05ZGQ0LWY4ZmM2NjRkYzJlNiIsInVzZXJuYW1lIjoiQWRtaW4iLCJleHAiOjE1ODkyMzA4NTAsImlzcyI6InlvdXJkb21haW4uY29tIiwiYXVkIjoieW91cmRvbWFpbi5jb20ifQ.5fzzdeNI5Jf35lnlBbbv3KbJvCrQzFoMivIdswj1t0o
+
+###
+
+GET {{server}}/api/users
+content-type: application/json
+Authorization: bearer {{token}}
+Accept: */*

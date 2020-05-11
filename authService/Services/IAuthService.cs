@@ -9,6 +9,6 @@ namespace authService.Services
 {
     public interface IAuthService
     {
-        Task<JwtSecurityToken> CreateToken(LoginCredentials credentials);
+        Task<JwtSecurityToken> CreateToken(string username, string password);
     }
 }
