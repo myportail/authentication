@@ -12,14 +12,11 @@ namespace authService.Controllers
     public class LoginController : Controller
     {
         private Services.IAuthService AuthService { get; }
-        private IPasswordHasher PasswordHasher { get; }
 
         public LoginController(
-            Services.IAuthService authService,
-            IPasswordHasher passwordHasher)
+            Services.IAuthService authService)
         {
             AuthService = authService;
-            PasswordHasher = passwordHasher;
         }
 
         [HttpPost]
@@ -27,7 +24,6 @@ namespace authService.Controllers
         {
             try
             {
-                var hashedPwd = PasswordHasher.HashPassword(credentials.Password);
                 var token = await AuthService.CreateToken(credentials.Username, credentials.Password);
 
                 if (token == null)

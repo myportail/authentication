@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Authlib.Configuration;
 using Authlib.Services;
-using authService.Models.Api;
-using authService.Models.Api.Parameters;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
