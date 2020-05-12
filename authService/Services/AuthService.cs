@@ -41,7 +41,9 @@ namespace authService.Services
 
                 var hashedPwd = PasswordHasher.HashPassword(password);
                 if (!user.Password.Equals(hashedPwd))
-                    throw new Exception("invalid credentials");
+                {
+                    return null;
+                }
                 
                 var claims = new[]
                 {

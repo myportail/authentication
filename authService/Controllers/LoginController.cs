@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using Authlib.Services;
 using authService.Models.Api.Parameters;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace authService.Controllers
@@ -28,7 +29,11 @@ namespace authService.Controllers
             {
                 var hashedPwd = PasswordHasher.HashPassword(credentials.Password);
                 var token = await AuthService.CreateToken(credentials.Username, credentials.Password);
-                
+
+                if (token == null)
+                {
+                    return Unauthorized();
+                }
                 // await MongoDbService.Init();
 
                 return Ok(new
@@ -38,7 +43,7 @@ namespace authService.Controllers
             }
             catch (Exception ex)
             {
-                return Unauthorized();
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }
