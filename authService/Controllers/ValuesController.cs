@@ -7,7 +7,8 @@ namespace authService.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    public class ValuesController : Controller
+    [ApiController]
+    public class ValuesController : ControllerBase
     {
 //        Contexts.UsersDbContext _context { get; }
 

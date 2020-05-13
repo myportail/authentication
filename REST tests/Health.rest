@@ -1,0 +1,6 @@
+@server = http://localhost:8001
+@version = v2
+
+###
+
+GET {{server}}/api/{{version}}/health HTTP/1.1

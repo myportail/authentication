@@ -13,7 +13,8 @@ namespace authService.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    public class UsersController : Controller
+    [ApiController]
+    public class UsersController : ControllerBase
     {
         private Services.IUsersService UsersService { get; }
         private IMapper AutoMapper { get; }

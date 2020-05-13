@@ -9,7 +9,8 @@ namespace authService.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    public class LoginController : Controller
+    [ApiController]
+    public class LoginController : ControllerBase
     {
         private Services.IAuthService AuthService { get; }
 

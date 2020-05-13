@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using authService.Contexts;
 using authService.Models.Api.Results;
@@ -10,7 +9,8 @@ namespace authService.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    public class HealthController : Controller
+    [ApiController]
+    public class HealthController : ControllerBase
     {
         private UserContext UserContext { get; }
         
