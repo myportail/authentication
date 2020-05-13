@@ -12,6 +12,7 @@ spec:
       labels:
         app: myportail
         service: auth
+        version: {{ .Values.version }}
     spec:
       containers:
         - name: auth

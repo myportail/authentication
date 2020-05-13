@@ -10,6 +10,7 @@ spec:
       labels:
         app: myportail
         service: authenticationinit
+        version: {{ .Values.version }}
     spec:
       containers:
         - name: authenticationinit
