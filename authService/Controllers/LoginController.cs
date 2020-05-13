@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace authService.Controllers
 {
-    [Route("api/login")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class LoginController : Controller
     {
         private Services.IAuthService AuthService { get; }

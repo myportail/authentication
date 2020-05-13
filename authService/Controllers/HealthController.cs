@@ -8,7 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace authService.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class HealthController : Controller
     {
         private UserContext UserContext { get; }

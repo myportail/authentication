@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace authService.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class ValuesController : Controller
     {
 //        Contexts.UsersDbContext _context { get; }

@@ -11,7 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace authService.Controllers
 {
-    [Route("api/users")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class UsersController : Controller
     {
         private Services.IUsersService UsersService { get; }

@@ -6,11 +6,13 @@ using Authlib.Configuration;
 using Authlib.Diagnostics;
 using Authlib.Services;
 using authService.Contexts;
+using authService.Swagger;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -108,10 +110,17 @@ namespace authService
                     } 
                 });
                 c.OperationFilter<SecurityRequirementsOperationFilter>();
-                
+                c.SchemaFilter<SchemaFilter>();
             });
             // services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddControllers();
+            services.AddApiVersioning();
+            services.AddApiVersioning(config =>
+            {
+                config.DefaultApiVersion = new ApiVersion(1,0);
+                config.AssumeDefaultVersionWhenUnspecified = true;
+                config.ReportApiVersions = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
