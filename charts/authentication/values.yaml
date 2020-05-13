@@ -5,6 +5,13 @@
 authdb:
   namespace: "myportail"
   enabled: true
+  defaultUser:
+    username: Admin
+    password: Admin@123
+  connection:
+    rootPassword: password123
+    user: authservice
+    password: igQFUwjZZyxgken7gcKg*gTu
 
 authInit:
   namespace: "myportail"
