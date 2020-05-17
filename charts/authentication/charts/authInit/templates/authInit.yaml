@@ -1,10 +1,13 @@
 
-apiVersion: batch/v1
-kind: Job
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: myportail-authinit
   namespace: {{ .Values.namespace }}
 spec:
+  selector:
+    matchLabels:
+      app: myportail
   template:
     metadata:
       labels:
@@ -38,4 +41,3 @@ spec:
                 secretKeyRef:
                   name: defaultuser-secrets
                   key: defaultuser.password
-      restartPolicy: Never

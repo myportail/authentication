@@ -67,7 +67,11 @@ namespace authInit
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
             
-            UpdateDb(app).ContinueWith((Task old) => { Environment.Exit(1); });
+            UpdateDb(app)
+                .ContinueWith((Task old) =>
+                {
+                    logger.LogInformation("database update completed");
+                });
         }
 
         async Task<Boolean> UpdateDb(IApplicationBuilder app)
