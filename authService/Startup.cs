@@ -43,6 +43,7 @@ namespace authService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
+            services.Configure<Configuration.AppSettings>(Configuration.GetSection("App"));
             services.Configure<Configuration.AuthdbSettings>(Configuration.GetSection("authdb"));
             services.Configure<TokenGenerationSettings>(Configuration.GetSection("TokenGeneration"));
             services.Configure<Configuration.SwaggerSettings>(Configuration.GetSection("Swagger"));
@@ -188,6 +189,10 @@ namespace authService
 
         private void LogSettings(IApplicationBuilder app, ILogger logger)
         {
+            SettingsLogger.LogSettings(
+                "app", 
+                app.ApplicationServices.GetService<IOptions<Configuration.AppSettings>>().Value, 
+                logger);
             SettingsLogger.LogSettings(
                 "authdb", 
                 app.ApplicationServices.GetService<IOptions<Configuration.AuthdbSettings>>().Value, 
