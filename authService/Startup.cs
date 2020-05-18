@@ -6,6 +6,7 @@ using Authlib.Configuration;
 using Authlib.Diagnostics;
 using Authlib.Services;
 using authService.Contexts;
+using authService.Extensions;
 using authService.Swagger;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -43,11 +44,7 @@ namespace authService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
-            services.Configure<Configuration.AppSettings>(Configuration.GetSection("App"));
-            services.Configure<Configuration.AuthdbSettings>(Configuration.GetSection("authdb"));
-            services.Configure<TokenGenerationSettings>(Configuration.GetSection("TokenGeneration"));
-            services.Configure<Configuration.SwaggerSettings>(Configuration.GetSection("Swagger"));
-            services.Configure<Configuration.StaticFilesSettings>(Configuration.GetSection("StaticFiles"));
+            services.SetupConfiguration(Configuration);
 
             // services.AddMvc();
             services.AddCors();
@@ -189,14 +186,12 @@ namespace authService
 
         private void LogSettings(IApplicationBuilder app, ILogger logger)
         {
-            SettingsLogger.LogSettings(
-                "app", 
-                app.ApplicationServices.GetService<IOptions<Configuration.AppSettings>>().Value, 
-                logger);
-            SettingsLogger.LogSettings(
-                "authdb", 
-                app.ApplicationServices.GetService<IOptions<Configuration.AuthdbSettings>>().Value, 
-                logger);
+            app.ApplicationServices.LogConfigurations(logger);
+            
+            // SettingsLogger.LogSettings(
+            //     "authdb", 
+            //     app.ApplicationServices.GetService<IOptions<Configuration.AuthdbSettings>>().Value, 
+            //     logger);
             SettingsLogger.LogSettings(
                 "TokenGeneration",
                 app.ApplicationServices.GetService<IOptions<TokenGenerationSettings>>().Value, 
