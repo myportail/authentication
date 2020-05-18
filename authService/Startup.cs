@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using Authlib.Configuration;
 using Authlib.Diagnostics;
+using Authlib.Extensions.Configuration;
 using Authlib.Services;
 using authService.Contexts;
 using authService.Extensions;
@@ -125,7 +126,7 @@ namespace authService
         {
             try
             {
-                LogSettings(app, logger);
+                app.ApplicationServices.LogConfigurations(logger);
 
                 var swaggerSettings = app.ApplicationServices.GetService<IOptions<Configuration.SwaggerSettings>>()
                     ?.Value;
@@ -182,28 +183,6 @@ namespace authService
                 System.Console.Error.WriteLine(ex.ToString());
                 throw ex;
             }
-        }
-
-        private void LogSettings(IApplicationBuilder app, ILogger logger)
-        {
-            app.ApplicationServices.LogConfigurations(logger);
-            
-            // SettingsLogger.LogSettings(
-            //     "authdb", 
-            //     app.ApplicationServices.GetService<IOptions<Configuration.AuthdbSettings>>().Value, 
-            //     logger);
-            SettingsLogger.LogSettings(
-                "TokenGeneration",
-                app.ApplicationServices.GetService<IOptions<TokenGenerationSettings>>().Value, 
-                logger);
-            SettingsLogger.LogSettings(
-                "Swagger",
-                app.ApplicationServices.GetService<IOptions<Configuration.SwaggerSettings>>().Value, 
-                logger);
-            SettingsLogger.LogSettings(
-                "StaticFiles",
-                app.ApplicationServices.GetService<IOptions<Configuration.StaticFilesSettings>>().Value, 
-                logger);
         }
     }
 }
