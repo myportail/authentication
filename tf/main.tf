@@ -24,21 +24,29 @@ provider "digitalocean" {
 #   region = "tor1"
 # }
 
-resource "digitalocean_kubernetes_cluster" "myportail" {
-  name    = "myportail"
+resource "digitalocean_kubernetes_cluster" "myportail_k8s_dev" {
+  name    = "myportail-k8s-dev"
   region  = "tor1"
   # Grab the latest version slug from `doctl kubernetes options versions`
-  version = "1.16.6-do.0"
+  version = "1.17.5-do.0"
 
   node_pool {
-    name       = "myportail-pool"
+    name       = "myportail-k8s-dev-pool"
     size       = "s-1vcpu-2gb"
     node_count = 2
   }
 }
 
 data "digitalocean_droplet" "myportail" {
-  name = digitalocean_kubernetes_cluster.myportail.node_pool[0].nodes[0].name
+  name = digitalocean_kubernetes_cluster.myportail_k8s_dev.node_pool[0].nodes[0].name
+}
+
+locals {
+  cluster_node_ids = [for node in digitalocean_kubernetes_cluster.myportail_k8s_dev.node_pool[0].nodes: node.droplet_id]
+}
+
+output "cluster_node_ids" {
+  value = local.cluster_node_ids
 }
 
 # resource "digitalocean_volume" "storage" {
@@ -54,17 +62,37 @@ data "digitalocean_droplet" "myportail" {
 # }
 
 output "kub_server_name" {
-   value = digitalocean_kubernetes_cluster.myportail.name
+   value = digitalocean_kubernetes_cluster.myportail_k8s_dev.name
 }
 
-output "kub_droplet_ip" {
-  value = data.digitalocean_droplet.myportail.ipv4_address
+# output "kub_droplet_ip" {
+#  value = data.digitalocean_droplet.myportail.ipv4_address
+# }
+
+resource "digitalocean_loadbalancer" "myportail_k8s_dev_lb" {
+  name   = "loadbalancer-myportail-dev"
+  region = "tor1"
+
+  forwarding_rule {
+    entry_port     = 80
+    entry_protocol = "http"
+
+    target_port     = 80
+    target_protocol = "http"
+  }
+
+  healthcheck {
+    port     = 30027
+    protocol = "tcp"
+  }
+
+  droplet_ids = local.cluster_node_ids
 }
 
 resource "digitalocean_record" "www" {
   domain = "danny-thibaudeau.ca"
   type = "A"
-  name = "dev.authdb"
-  value = data.digitalocean_droplet.myportail.ipv4_address
+  name = "myportail"
+  value = digitalocean_loadbalancer.myportail_k8s_dev_lb.ip
   ttl = "60"
 }
