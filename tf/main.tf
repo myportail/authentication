@@ -70,30 +70,30 @@ output "kub_server_name" {
 #  value = data.digitalocean_droplet.myportail.ipv4_address
 # }
 
-resource "digitalocean_loadbalancer" "myportail_k8s_dev_lb" {
-  name   = "loadbalancer-myportail-dev"
-  region = "tor1"
+// resource "digitalocean_loadbalancer" "myportail_k8s_dev_lb" {
+//   name   = "loadbalancer-myportail-dev"
+//   region = "tor1"
 
-  forwarding_rule {
-    entry_port     = 80
-    entry_protocol = "http"
+//   forwarding_rule {
+//     entry_port     = 80
+//     entry_protocol = "http"
 
-    target_port     = 80
-    target_protocol = "http"
-  }
+//     target_port     = 80
+//     target_protocol = "http"
+//   }
 
-  healthcheck {
-    port     = 30027
-    protocol = "tcp"
-  }
+//   healthcheck {
+//     port     = 30027
+//     protocol = "tcp"
+//   }
 
-  droplet_ids = local.cluster_node_ids
-}
+//   droplet_ids = local.cluster_node_ids
+// }
 
-resource "digitalocean_record" "www" {
-  domain = "danny-thibaudeau.ca"
-  type = "A"
-  name = "myportail"
-  value = digitalocean_loadbalancer.myportail_k8s_dev_lb.ip
-  ttl = "60"
-}
+// resource "digitalocean_record" "www" {
+//   domain = "danny-thibaudeau.ca"
+//   type = "A"
+//   name = "myportail"
+//   value = digitalocean_loadbalancer.myportail_k8s_dev_lb.ip
+//   ttl = "60"
+// }
