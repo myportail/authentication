@@ -43,11 +43,12 @@ data "digitalocean_droplet" "myportail" {
 
 locals {
   cluster_node_ids = [for node in digitalocean_kubernetes_cluster.myportail_k8s_dev.node_pool[0].nodes: node.droplet_id]
+  // kube_config = digitalocean_kubernetes_cluster.myportail_k8s_dev.kube_config.0
 }
 
-output "cluster_node_ids" {
-  value = local.cluster_node_ids
-}
+// output "kube_config" {
+//   value = local.kube_config
+// }
 
 # resource "digitalocean_volume" "storage" {
 #   region                  = "tor1"
