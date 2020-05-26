@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: ingress
-  namespace: {{ .Values.namespace }}
+  namespace: loki
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
@@ -16,14 +16,14 @@ metadata:
     nginx.org/websocket-services: core-service
 spec:
   rules:
-    - host: myportail.danny-thibaudeau.ca
+    - host: loki.danny-thibaudeau.ca
       http:
         paths:
-          - path: /loki/(.*)
+          - path: /(.*)
             backend:
-              serviceName: authservice
+              serviceName: loki-grafana
               servicePort: 80
-          - path: /loki
+          - path: /
             backend:
-              serviceName: authservice
+              serviceName: loki-grafana
               servicePort: 80
