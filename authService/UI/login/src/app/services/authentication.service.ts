@@ -11,7 +11,7 @@ export class AuthenticationService {
   ) { }
 
   login(username: string, password: string) {
-    this.httpClient.get('api/values', {})
+    this.httpClient.get('api/v1/values', {})
       .subscribe(
         (data) => {
         console.log(data);
