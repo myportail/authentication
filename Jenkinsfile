@@ -14,7 +14,7 @@ pipeline {
         stage('build authentication-init') {
             steps {
                 script {
-                    authInitImage = docker.build("myportail/authentication-init:1.0.${env.BUILD_ID}", "-f ./Docker/authInit/Dockerfile .")
+                    authInitImage = docker.build("myportail/authentication-init:1.0.${env.BUILD_ID}", "-f ./authInit/Dockerfile .")
                 }
             }
         }
@@ -22,7 +22,7 @@ pipeline {
         stage('build authentication-service') {
             steps {
                 script {
-                    authServiceImage = docker.build("myportail/auth-service:1.0.${env.BUILD_ID}", "--build-arg version=1.0.${env.BUILD_ID} -f ./Docker/authService/Dockerfile .")
+                    authServiceImage = docker.build("myportail/auth-service:1.0.${env.BUILD_ID}", "--build-arg version=1.0.${env.BUILD_ID} -f ./authService/Dockerfile .")
                 }
             }
         }
