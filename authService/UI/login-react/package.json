@@ -14,7 +14,7 @@
     "@types/react-redux": "^7.1.7",
     "axios": "^0.19.2",
     "env-cmd": "^10.1.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-helmet": "^5.2.1",
